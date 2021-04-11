@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use App\Http\Controllers\Hash;
 //import auth facades
 use Illuminate\Support\Facades\Auth;
 
@@ -53,19 +53,34 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-          //validate incoming request 
+        //validate incoming request 
         $this->validate($request, [
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
-
-        $credentials = $request->only(['email', 'password']);
-
-        if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        //input
+        $email = $request->input('email');
+        $plainPassword = $request->input('password');
+        //check user
+        $user = User::where('email', $email)->first();
+        if ( $user && app('hash')->check($plainPassword, $user->password)){
+            //token
+            $credentials = $request->only(['email', 'password']);
+        
+            if (! $token = Auth::attempt($credentials)) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+            
+            return response()->json([
+                'message' => 'Success',
+                'user' => $user,
+                'token' => $this->respondWithToken($token)
+            ]);
+            //token only
+            // return $this->respondWithToken($token);
+        } else {
+            return response()->json(['message' => ['Incorrect Email or Password']], 401);
         }
-
-        return $this->respondWithToken($token);
     }
 
 }

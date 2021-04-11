@@ -1,5 +1,3 @@
-//config.auth.php
-
 <?php
 
 return [
