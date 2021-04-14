@@ -41,4 +41,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     // Matches "/api/users
     $router->get('users', 'UserController@allUsers');
+
+    //Controller Ternak
+    $router->get('ternak', 'TernakController@index');
+    $router->get('ternak/{id}', 'TernakController@show');
+    $router->post('ternak/save', 'TernakController@store');
+    $router->post('ternak/{id}', 'TernakController@update');
+    $router->delete('ternak/{id}', 'TernakController@destroy');
 });
