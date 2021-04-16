@@ -32,6 +32,8 @@ class AuthController extends Controller
             $user->email = $request->input('email');
             $plainPassword = $request->input('password');
             $user->password = app('hash')->make($plainPassword);
+            $user->role = $request->input('role');
+            $user->user_st = "aktif";
 
             $user->save();
 
@@ -40,7 +42,7 @@ class AuthController extends Controller
 
         } catch (\Exception $e) {
             //return error message
-            return response()->json(['message' => 'User Registration Failed!'], 409);
+            return response()->json(['message' => $e], 409);
         }
 
     }

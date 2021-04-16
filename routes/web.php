@@ -49,3 +49,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('ternak/{id}', 'TernakController@update');
     $router->delete('ternak/{id}', 'TernakController@destroy');
 });
+
+$router->get('/key', function() {
+    return \Illuminate\Support\Str::random(32);
+});
