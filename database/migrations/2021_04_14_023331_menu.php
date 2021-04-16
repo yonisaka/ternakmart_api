@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Jenis extends Migration
+class Menu extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class Jenis extends Migration
      */
     public function up()
     {
-        Schema::create('jenis', function (Blueprint $table) {
+        Schema::create('menu', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('jenis_nama');
-            $table->integer('perawatan_harga');
+            $table->unsignedBigInteger('parent_id');
+            $table->string('nav_title');
+            $table->string('url');
+            $table->string('icon');
         });
     }
 
@@ -27,6 +29,6 @@ class Jenis extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('menu');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Hash;
+use Illuminate\Support\Facades\DB;
 //import auth facades
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +33,8 @@ class AuthController extends Controller
             $user->email = $request->input('email');
             $plainPassword = $request->input('password');
             $user->password = app('hash')->make($plainPassword);
-
+            $user->role_id = 1;
+            $user->user_st = 'aktif';
             $user->save();
 
             //return successful response
@@ -83,4 +85,29 @@ class AuthController extends Controller
         }
     }
 
+    public function navigation($role_id){
+
+        $main_nav = DB::table('menu')
+                    ->leftJoin('role_menu', 'menu.id', '=', 'role_menu.menu_id')
+                    ->where('parent_id',0)
+                    ->where('role_id',$role_id)
+                    ->get();
+        $result_array = json_decode(json_encode($main_nav), true);
+        
+        $res=array();
+        foreach ($main_nav as $key => $data) {
+            $data = json_decode(json_encode($data), true);
+            $rs_id = DB::table('menu')
+                    ->where('parent_id',$data['id'])
+                    ->get();
+            $rs_id = json_decode(json_encode($rs_id), true);
+            $res[$key] = $data;
+            if ($rs_id){
+                $res[$key]['subLinks'] = $rs_id;
+            }
+                
+        }
+
+        return response()->json($res, 200);
+    }
 }

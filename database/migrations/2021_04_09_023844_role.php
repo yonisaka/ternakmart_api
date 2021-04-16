@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Verifikator extends Migration
+class Role extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class Verifikator extends Migration
      */
     public function up()
     {
-        // Schema::create('verifikator', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->string('verifikator_nama');
-        //     $table->unsignedBigInteger('id_user');
-        //     $table->foreign('user_id')->references('id')->on('users');
-        // });
+        Schema::create('role', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('role_nama');
+        });
     }
 
     /**
@@ -28,6 +26,6 @@ class Verifikator extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('role');
     }
 }
