@@ -13,22 +13,30 @@ class Ternak extends Migration
      */
     public function up()
     {
-        // Schema::create('ternak', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->string('ternak_nama', 200);
-        //     $table->integer('ternak_berat');
-        //     $table->integer('ternak_tinggi');
-        //     $table->integer('ternak_umur');
-        //     $table->text('ternak_deskripsi');
-        //     $table->unsignedBigInteger('id_pedagang');
-        //     $table->unsignedBigInteger('id_verifikator');
-        //     $table->integer('ternak_harga');
-        //     $table->date('tgl_penerimaan');
-        //     $table->string('ternak_st', 200);
-        //     $table->string('verifikasi_st', 200);
-        //     $table->foreignId('id_jenis');
-        //     $table->timestamps();
-        // });
+        Schema::create('ternak', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('ternak_nama', 200);
+            $table->unsignedBigInteger('id_jenis');
+            $table->foreign('id_jenis')->references('id')->on('jenis');
+            $table->enum('jenis_kelamin', ['L', 'P']);
+            $table->integer('ternak_berat');
+            $table->integer('ternak_tinggi');
+            $table->integer('ternak_umur');
+            $table->text('ternak_deskripsi');
+            $table->unsignedBigInteger('id_customer');
+            $table->foreign('id_customer')->references('id')->on('customer');
+            $table->unsignedBigInteger('id_dokter');
+            $table->foreign('id_dokter')->references('id')->on('dokter');
+            $table->unsignedBigInteger('id_penjual');
+            $table->foreign('id_penjual')->references('id')->on('penjual');
+            $table->integer('ternak_harga');
+            $table->date('tgl_penerimaan');
+            $table->date('tgl_keluar');
+            $table->enum('ternak_st', ['1', '0'])->default('0');
+            $table->enum('verifikasi_st', ['1', '0'])->default('0');
+            $table->text('verifikasi_note');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -38,6 +46,6 @@ class Ternak extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('ternak');
     }
 }
