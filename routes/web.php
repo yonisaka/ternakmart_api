@@ -17,6 +17,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+
+
 // API route group
 $router->group(['prefix' => 'api'], function () use ($router) {
     // Matches "/api/users
@@ -26,6 +28,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 // API route group
 $router->group(['prefix' => 'api'], function () use ($router) {
+    //get navigation
+    $router->get('nav/{role_id}', 'AuthController@navigation');
     // Matches "/api/register
     $router->post('register', 'AuthController@register');
 
