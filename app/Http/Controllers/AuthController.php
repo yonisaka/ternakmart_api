@@ -89,27 +89,31 @@ class AuthController extends Controller
 
     public function navigation($role_id){
 
-        $main_nav = DB::table('menu')
+        try {
+            $main_nav = DB::table('menu')
                     ->leftJoin('role_menu', 'menu.id', '=', 'role_menu.menu_id')
                     ->where('parent_id',0)
                     ->where('role_id',$role_id)
                     ->get();
-        $result_array = json_decode(json_encode($main_nav), true);
-        
-        $res=array();
-        foreach ($main_nav as $key => $data) {
-            $data = json_decode(json_encode($data), true);
-            $rs_id = DB::table('menu')
-                    ->where('parent_id',$data['id'])
-                    ->get();
-            $rs_id = json_decode(json_encode($rs_id), true);
-            $res[$key] = $data;
-            if ($rs_id){
-                $res[$key]['subLinks'] = $rs_id;
+            $result_array = json_decode(json_encode($main_nav), true);
+            
+            $res=array();
+            foreach ($main_nav as $key => $data) {
+                $data = json_decode(json_encode($data), true);
+                $rs_id = DB::table('menu')
+                        ->where('parent_id',$data['id'])
+                        ->get();
+                $rs_id = json_decode(json_encode($rs_id), true);
+                $res[$key] = $data;
+                if ($rs_id){
+                    $res[$key]['subLinks'] = $rs_id;
+                }
+                    
             }
-                
-        }
 
-        return response()->json($res, 200);
+            return response()->json($res, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e], 409);
+        }
     }
 }

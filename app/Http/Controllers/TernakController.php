@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ternak;
+use Illuminate\Support\Facades\DB;
 
 class TernakController extends Controller
 {
@@ -18,7 +19,11 @@ class TernakController extends Controller
     }
 
     public function index(){
-        return response()->json(['ternak' =>  Ternak::all()], 200);
+        $data = DB::table('ternak')
+                ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
+                ->get();
+
+        return response()->json(['ternak' =>  $data], 200);
     }
 
     public function show($id){
