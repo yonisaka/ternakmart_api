@@ -49,9 +49,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //Controller Ternak
     $router->get('ternak', 'TernakController@index');
     $router->get('ternak/{id}', 'TernakController@show');
-    $router->post('ternak/save', 'TernakController@store');
-    $router->post('ternak/{id}', 'TernakController@update');
+    $router->post('ternak', 'TernakController@store');
+    $router->put('ternak/{id}', 'TernakController@update');
     $router->delete('ternak/{id}', 'TernakController@destroy');
+
+    //Controller Golongan
+    $router->get('golongan', 'GolonganController@index');
+    //Controller Jenis
+    $router->get('jenis', 'JenisController@index');
+    $router->get('jenis/{id_golongan}/{jenis_kelamin}', 'JenisController@show');
 });
 
 $router->get('/key', function() {

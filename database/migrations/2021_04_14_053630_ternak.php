@@ -18,7 +18,7 @@ class Ternak extends Migration
             $table->string('ternak_nama', 200);
             $table->unsignedBigInteger('id_jenis');
             $table->foreign('id_jenis')->references('id')->on('jenis');
-            $table->enum('jenis_kelamin', ['L', 'P']);
+            $table->enum('jenis_kelamin', ['J', 'B']);
             $table->integer('ternak_berat');
             $table->integer('ternak_tinggi');
             $table->integer('ternak_umur');
@@ -32,6 +32,8 @@ class Ternak extends Migration
             $table->integer('ternak_harga');
             $table->date('tgl_penerimaan');
             $table->date('tgl_keluar');
+            $table->string('file_name');
+            $table->string('file_path');
             $table->enum('ternak_st', ['1', '0'])->default('0');
             $table->enum('verifikasi_st', ['1', '0'])->default('0');
             $table->text('verifikasi_note');

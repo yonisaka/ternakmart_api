@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Jenis extends Migration
+class Golongan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class Jenis extends Migration
      */
     public function up()
     {
-        Schema::create('jenis', function (Blueprint $table) {
+        Schema::create('golongan', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_golongan');
-            $table->foreign('id_golongan')->references('id')->on('golongan');
-            $table->string('jenis_nama');
-            $table->enum('jenis_kelamin', ['J', 'B']);
-            $table->integer('perawatan_harga');
+            $table->string('golongan_nama');
+            $table->smallInteger('status');
         });
     }
 
@@ -30,6 +27,6 @@ class Jenis extends Migration
      */
     public function down()
     {
-        Schema::drop('jenis');
+        Schema::drop('golongan');
     }
 }
