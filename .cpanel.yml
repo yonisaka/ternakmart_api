@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ternakma/public_html/ternakmart_api
-    - /bin/cp /home/ternakma/repositories/ternakmart_api/* $DEPLOYPATH
+    - /bin/ cp /home/ternakma/repositories/ternakmart_api/* $DEPLOYPATH
