@@ -28,23 +28,18 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 // API route group
 $router->group(['prefix' => 'api'], function () use ($router) {
-    //get navigation
+    // navigation
     $router->get('nav/{role_id}', 'AuthController@navigation');
-    // Matches "/api/register
+    // auth
     $router->post('register', 'AuthController@register');
-
-    // Matches "/api/login
     $router->post('login', 'AuthController@login');
 
     // Matches "/api/profile
-    $router->get('profile', 'UserController@profile');
+    // $router->get('profile', 'UserController@profile');
 
-    // Matches "/api/users/1 
-    //get one user by id
     $router->get('users/{id}', 'UserController@singleUser');
-
-    // Matches "/api/users
     $router->get('users', 'UserController@allUsers');
+    $router->delete('users/{id}', 'UserController@destroy');
 
     //Controller Ternak
     $router->get('ternak', 'TernakController@index');
@@ -58,6 +53,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //Controller Jenis
     $router->get('jenis', 'JenisController@index');
     $router->get('jenis/{id_golongan}/{jenis_kelamin}', 'JenisController@show');
+
+    //Controller Pemeriksaan
+    $router->get('pemeriksaan/{id}', 'PemeriksaanController@show');
+    $router->post('pemeriksaan', 'PemeriksaanController@store');
+    $router->put('pemeriksaan/{id}', 'PemeriksaanController@update');
 });
 
 $router->get('/key', function() {

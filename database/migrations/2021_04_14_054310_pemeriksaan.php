@@ -19,6 +19,7 @@ class Pemeriksaan extends Migration
             $table->foreign('id_ternak')->references('id')->on('ternak');
             $table->unsignedBigInteger('id_dokter');
             $table->foreign('id_dokter')->references('id')->on('dokter');
+            $table->integer('rfid');
             $table->enum('vaksin_st', ['1', '0'])->default('0');
             $table->string('obat_cacing');
             $table->smallInteger('umur_bunting');
@@ -28,6 +29,7 @@ class Pemeriksaan extends Migration
             $table->string('tonus_rumen');
             $table->string('inseminasi');
             $table->string('pengobatan');
+            $table->date('tgl_pemeriksaan');
             $table->timestamps();
         });
     }

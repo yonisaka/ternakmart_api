@@ -75,6 +75,9 @@ class AuthController extends Controller
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
             
+            $user->remember_token = $token;
+            $user->save();
+            
             return response()->json([
                 'message' => 'Success',
                 'user' => $user,

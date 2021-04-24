@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -34,7 +35,12 @@ class UserController extends Controller
      */
     public function allUsers()
     {
-         return response()->json(['users' =>  User::all()], 200);
+        $data = DB::table('users')
+                ->leftJoin('role', 'users.role_id', '=', 'role.id')
+                ->select('users.*','role.role_nama')
+                ->get();
+
+        return response()->json(['users' =>  $data], 200);
     }
 
     /**
@@ -45,15 +51,33 @@ class UserController extends Controller
     public function singleUser($id)
     {
         try {
-            $user = User::findOrFail($id);
+            $data = DB::table('users')
+                    ->where('id', $id)
+                    ->first();
 
-            return response()->json(['user' => $user], 200);
+            if($data){
+                $result_array = json_decode(json_encode($data), true);
+                return response()->json([
+                    'message' => 'Success',
+                    'user' => $data,
+                    'token' => $this->respondWithToken($result_array['remember_token'])
+                ]);
+            } else {
+                return response()->json(['message' => 'user not found!'], 404);
+            }
 
         } catch (\Exception $e) {
 
             return response()->json(['message' => 'user not found!'], 404);
         }
 
+    }
+
+    public function destroy($id){
+        $data = User::where('id', $id)->first();
+        $data->delete();
+
+        return response()->json(['message' => 'Berhasil Menghapus Data'], 200);
     }
 
 }

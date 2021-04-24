@@ -21,7 +21,8 @@ class TernakController extends Controller
     public function index(){
         $data = DB::table('ternak')
                 ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
-                ->select('ternak.*','jenis.jenis_nama')
+                ->leftJoin('pemeriksaan', 'ternak.id','=','pemeriksaan.id_ternak')
+                ->select('ternak.*','jenis.jenis_nama','pemeriksaan.rfid','pemeriksaan.tgl_pemeriksaan')
                 ->get();
 
         return response()->json(['ternak' =>  $data], 200);
@@ -56,12 +57,13 @@ class TernakController extends Controller
         $data->id_jenis = $request->input('id_jenis');
         $data->jenis_kelamin = $request->input('jenis_kelamin');
         $data->ternak_berat = $request->input('ternak_berat');
-        $data->ternak_tinggi = $request->input('ternak_tinggi');
+        $data->lingkar_perut = $request->input('lingkar_perut');
         $data->ternak_umur = $request->input('ternak_umur');
         $data->ternak_deskripsi = $request->input('ternak_deskripsi');
         $data->id_customer = $request->input('id_customer');
         $data->id_dokter = $request->input('id_dokter');
         $data->id_penjual = $request->input('id_penjual');
+        $data->harga_pengajuan = $request->input('harga_pengajuan');
         $data->ternak_harga = $request->input('ternak_harga');
         $data->tgl_penerimaan = $request->input('tgl_penerimaan');
         $data->tgl_keluar = $request->input('tgl_keluar');
@@ -94,18 +96,21 @@ class TernakController extends Controller
         $data->id_jenis = empty($request->input('id_jenis')) ? $data->id_jenis : $request->input('id_jenis');
         $data->jenis_kelamin = empty($request->input('jenis_kelamin')) ? $data->jenis_kelamin : $request->input('jenis_kelamin');
         $data->ternak_berat = empty($request->input('ternak_berat')) ? $data->ternak_berat : $request->input('ternak_berat');
-        $data->ternak_tinggi = empty($request->input('ternak_tinggi')) ? $data->ternak_tinggi : $request->input('ternak_tinggi');
+        $data->lingkar_perut = empty($request->input('lingkar_perut')) ? $data->lingkar_perut : $request->input('lingkar_perut');
         $data->ternak_umur = empty($request->input('ternak_umur')) ? $data->ternak_umur : $request->input('ternak_umur');
         $data->ternak_deskripsi = empty($request->input('ternak_deskripsi')) ? $data->ternak_deskripsi : $request->input('ternak_deskripsi');
         $data->id_customer = empty($request->input('id_customer')) ? $data->id_customer : $request->input('id_customer');
         $data->id_dokter = empty($request->input('id_dokter')) ? $data->id_dokter : $request->input('id_dokter');
         $data->id_penjual = empty($request->input('id_penjual')) ? $data->id_penjual : $request->input('id_penjual');
+        $data->harga_pengajuan = empty($request->input('harga_pengajuan')) ? $data->harga_pengajuan : $request->input('harga_pengajuan');
         $data->ternak_harga = empty($request->input('ternak_harga')) ? $data->ternak_harga : $request->input('ternak_harga');
         $data->tgl_penerimaan = empty($request->input('tgl_penerimaan')) ? $data->tgl_penerimaan : $request->input('tgl_penerimaan');
         $data->tgl_keluar = empty($request->input('tgl_keluar')) ? $data->tgl_keluar : $request->input('tgl_keluar');
         $data->file_name = $filename;
         $data->file_path = url('/').'/'.$path.'/'.$filename;
-        $data->ternak_st = empty($request->input('ternak_st')) ? $data->ternak_st : $request->input('ternak_st');
+        $data->ternak_st = $request->input('ternak_st');
+        // $data->ternak_st = empty($request->input('ternak_st')) ? $data->ternak_st : $request->input('ternak_st');
+        // $data->verifikasi_st = $request->input('verifikasi_st');
         $data->verifikasi_st = empty($request->input('verifikasi_st')) ? $data->verifikasi_st : $request->input('verifikasi_st');
         $data->verifikasi_note = empty($request->input('verifikasi_note')) ? $data->verifikasi_note : $request->input('verifikasi_note');
         $data->save();

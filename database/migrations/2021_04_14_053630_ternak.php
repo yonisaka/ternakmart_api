@@ -20,7 +20,7 @@ class Ternak extends Migration
             $table->foreign('id_jenis')->references('id')->on('jenis');
             $table->enum('jenis_kelamin', ['J', 'B']);
             $table->integer('ternak_berat');
-            $table->integer('ternak_tinggi');
+            $table->integer('lingkar_perut');
             $table->integer('ternak_umur');
             $table->text('ternak_deskripsi');
             $table->unsignedBigInteger('id_customer');
@@ -29,6 +29,7 @@ class Ternak extends Migration
             $table->foreign('id_dokter')->references('id')->on('dokter');
             $table->unsignedBigInteger('id_penjual');
             $table->foreign('id_penjual')->references('id')->on('penjual');
+            $table->integer('harga_pengajuan');
             $table->integer('ternak_harga');
             $table->date('tgl_penerimaan');
             $table->date('tgl_keluar');
