@@ -58,6 +58,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('pemeriksaan/{id}', 'PemeriksaanController@show');
     $router->post('pemeriksaan', 'PemeriksaanController@store');
     $router->put('pemeriksaan/{id}', 'PemeriksaanController@update');
+
+    //Controller Transaksi
+    $router->post('transaksi', 'TransaksiController@store');
+    $router->get('transaksi/{id}', 'TransaksiController@show');
+
 });
 
 $router->get('/key', function() {
