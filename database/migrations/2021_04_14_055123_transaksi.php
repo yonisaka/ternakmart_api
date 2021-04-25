@@ -13,19 +13,20 @@ class Transaksi extends Migration
      */
     public function up()
     {
-        // Schema::create('transaksi', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->unsignedBigInteger('id_ternak');
-        //     $table->foreign('user_id')->references('id')->on('ternak');
-        //     $table->unsignedBigInteger('id_user');
-        //     $table->foreign('user_id')->references('id')->on('users');
-        //     $table->integer('ternak_harga');
-        //     $table->integer('masa_perawatan');
-        //     $table->integer('total_harga');
-        //     $table->date('transaksi_tanggal');
-        //     $table->string("transaksi_st");
-        //     $table->text('transaksi_alamat');
-        // });
+        Schema::create('transaksi', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('id_ternak');
+            $table->foreign('id_ternak')->references('id')->on('ternak');
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users');
+            $table->integer('ternak_harga');
+            $table->integer('masa_perawatan');
+            $table->integer('total_harga');
+            $table->date('transaksi_tanggal');
+            $table->string("transaksi_st");
+            $table->text('transaksi_alamat');
+            $table->timestamps();
+        });
         
     }
 

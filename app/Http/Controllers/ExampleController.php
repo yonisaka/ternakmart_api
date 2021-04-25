@@ -14,5 +14,21 @@ class ExampleController extends Controller
         //
     }
 
+    public function index(){
+        //asd
+    }
+    public function show($id){
+        //asd
+    }
+    public function store(Request $resuest){
+        //asd
+    }
+    public function update(Request $request){
+        //asd
+    }
+    public function destroy($id){
+        //asd
+    }
+
     //
 }
