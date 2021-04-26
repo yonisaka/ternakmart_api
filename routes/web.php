@@ -40,6 +40,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('users/{id}', 'UserController@singleUser');
     $router->get('users', 'UserController@allUsers');
     $router->delete('users/{id}', 'UserController@destroy');
+    $router->post('users', 'UserController@store');
+    $router->put('users/{id}', 'UserController@update');
 
     //Controller Ternak
     $router->get('ternak', 'TernakController@index');
@@ -54,10 +56,43 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('jenis', 'JenisController@index');
     $router->get('jenis/{id_golongan}/{jenis_kelamin}', 'JenisController@show');
 
+    //Controller menu
+    $router->get('menu', 'MenuController@index');
+    $router->get('menu/{id}', 'MenuController@show');
+    $router->put('menu/{id}', 'MenuController@update');
+
+    //Controller role
+    $router->get('role', 'RoleController@index');
+    $router->get('role_menu', 'RoleController@role_menu');
+    $router->get('role/{id}', 'RoleController@show');
+    $router->put('role/{id}', 'RoleController@update');
+    $router->delete('role_menu/{role_id}/{menu_id}', 'RoleController@destroy');
+
     //Controller Pemeriksaan
     $router->get('pemeriksaan/{id}', 'PemeriksaanController@show');
     $router->post('pemeriksaan', 'PemeriksaanController@store');
     $router->put('pemeriksaan/{id}', 'PemeriksaanController@update');
+
+    //Controller Dokter
+    $router->get('dokter', 'DokterController@index');
+    $router->get('dokter/{id}', 'DokterController@show');
+    $router->delete('dokter/{id}', 'DokterController@destroy');
+    $router->post('dokter', 'DokterController@store');
+    $router->put('dokter/{id}', 'DokterController@update');
+    
+    //Controller penjual
+    $router->get('penjual', 'PenjualController@index');
+    $router->get('penjual/{id}', 'PenjualController@show');
+    $router->delete('penjual/{id}', 'PenjualController@destroy');
+    $router->post('penjual', 'PenjualController@store');
+    $router->put('penjual/{id}', 'PenjualController@update');
+
+    //Controller customer
+    $router->get('customer', 'CustomerController@index');
+    $router->get('customer/{id}', 'CustomerController@show');
+    $router->delete('customer/{id}', 'CustomerController@destroy');
+    $router->post('customer', 'CustomerController@store');
+    $router->put('customer/{id}', 'CustomerController@update');
 });
 
 $router->get('/key', function() {

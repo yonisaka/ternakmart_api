@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,69 @@ class UserController extends Controller
         } catch (\Exception $e) {
 
             return response()->json(['message' => 'user not found!'], 404);
+        }
+
+    }
+
+    public function store(Request $request)
+    {
+        //validate incoming request 
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+        ]);
+
+        try {
+
+            $user = new User;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $plainPassword = $request->input('password');
+            $user->password = app('hash')->make($plainPassword);
+
+            $user->role_id = $request->input('role_id');
+            $user->user_st = $request->input('user_st');
+
+            $user->save();
+
+            //return successful response
+            return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
+
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => $e], 409);
+        }
+
+    }
+
+    public function update(Request $request, $id)
+    {
+        //validate incoming request 
+        // $this->validate($request, [
+        //     'name' => 'required|string',
+        //     'email' => 'required|email|unique:users',
+        //     'password' => 'required|confirmed',
+        // ]);
+
+        try {
+
+            $user = User::where('id', $id)->first();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            // $plainPassword = $request->input('password');
+            // $user->password = app('hash')->make($plainPassword);
+
+            // $user->role_id = $request->input('role_id');
+            $user->user_st = $request->input('user_st');
+            $user->save();
+
+            //return successful response
+            return response()->json(['user' => $user, 'message' => 'UPDATED'], 201);
+
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => $e], 409);
         }
 
     }

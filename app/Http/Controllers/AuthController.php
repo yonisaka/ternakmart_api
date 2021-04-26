@@ -34,8 +34,8 @@ class AuthController extends Controller
             $plainPassword = $request->input('password');
             $user->password = app('hash')->make($plainPassword);
 
-            $user->role_id = 1;
-            $user->user_st = 'aktif';
+            $user->role_id = $request->input('role_id');
+            $user->user_st = $request->input('user_st');
 
             $user->save();
 
@@ -96,7 +96,9 @@ class AuthController extends Controller
             $main_nav = DB::table('menu')
                     ->leftJoin('role_menu', 'menu.id', '=', 'role_menu.menu_id')
                     ->where('parent_id',0)
+                    ->where('status','1')
                     ->where('role_id',$role_id)
+                    ->orderby('urutan','asc')
                     ->get();
             $result_array = json_decode(json_encode($main_nav), true);
             
