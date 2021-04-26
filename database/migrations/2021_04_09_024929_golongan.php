@@ -13,11 +13,11 @@ class Golongan extends Migration
      */
     public function up()
     {
-        Schema::create('golongan', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('golongan_nama');
-            $table->smallInteger('status');
-        });
+        // Schema::create('golongan', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->string('golongan_nama');
+        //     $table->smallInteger('status');
+        // });
     }
 
     /**

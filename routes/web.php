@@ -93,6 +93,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->delete('customer/{id}', 'CustomerController@destroy');
     $router->post('customer', 'CustomerController@store');
     $router->put('customer/{id}', 'CustomerController@update');
+    
+    //Controller Transaksi
+    $router->post('transaksi', 'TransaksiController@store');
+    $router->get('transaksi/{id}', 'TransaksiController@show');
+
 });
 
 $router->get('/key', function() {
