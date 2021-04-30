@@ -23,15 +23,16 @@ class TransaksiController extends Controller
     }
     public function show($id){
         try {
-            $cart = DB::table('transaksi')
+            $query = DB::table('transaksi')
                     ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
                     'ternak.file_path')
                     ->where('transaksi.id_user','=',$id)
-                    ->where('transaksi.transaksi_st','=', "cart")
-                    ->get();
+                    ->where('transaksi.transaksi_st','=', "cart");
+            $cart = $query->get();
+            $count = $query->count();
 
-            return response()->json(['cart' => $cart], 200);
+            return response()->json(['cart' => $cart, 'counts' => $count], 200);
 
         } catch (\Exception $e) {
 
