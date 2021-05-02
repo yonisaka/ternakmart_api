@@ -73,8 +73,9 @@ $app->configure('app');
 */
 
 $app->middleware([
-    // App\Http\Middleware\CorsMiddleware::class
-    palanik\lumen\Middleware\LumenCors
+    App\Http\Middleware\CorsMiddleware::class
+    // App\Http\Middleware\LumenCors::class
+    // palanik\lumen\Middleware\LumenCors
     // \Fruitcake\Cors\HandleCors::class,
 ]);
 
