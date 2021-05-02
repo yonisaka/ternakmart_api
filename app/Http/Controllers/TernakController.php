@@ -16,9 +16,6 @@ class TernakController extends Controller
     public function __construct()
     {
         //
-        Header('Access-Control-Allow-Origin: *'); //for allow any domain, insecure
-        Header('Access-Control-Allow-Headers: *'); //for allow any headers, insecure
-        Header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE'); //method allowed
     }
 
     public function index(){
@@ -41,9 +38,7 @@ class TernakController extends Controller
                 $ternak = DB::table('ternak')
                         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
                         ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
-                        ->leftJoin('dokter', 'ternak.id_dokter', '=', 'dokter.id')
-                        ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama',
-                        'dokter.nama_lengkap')
+                        ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama')
                         ->where('ternak.id','=',$id)
                         ->first();
     
@@ -172,24 +167,5 @@ class TernakController extends Controller
         $data->delete();
 
         return response()->json(['message' => 'Berhasil Menghapus Data'], 200);
-    }
-
-    public function search(Request $request){
-        try {
-            $ternak = DB::table('ternak')
-                    ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
-                    ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
-                    ->leftJoin('dokter', 'ternak.id_dokter', '=', 'dokter.id')
-                    ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama',
-                    'dokter.nama_lengkap')
-                    ->where('ternak.ternak_nama','like', '%'.$request->input('search').'%')
-                    ->get();
-
-            return response()->json(['ternak' => $ternak], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => $e], 404);
-        }
     }
 }
