@@ -19,9 +19,12 @@ class JenisController extends Controller
     }
 
     public function index(){
-        $data = Jenis::all();
+        $jenis = DB::table('jenis')
+                        ->leftJoin('golongan','golongan.id','=','jenis.id_golongan')
+                        ->select('jenis.*','golongan.golongan_nama')
+                        ->get();
 
-        return response()->json(['jenis' =>  $data], 200);
+        return response()->json(['jenis' =>  $jenis], 200);
     }
 
     public function show($id_golongan, $jenis_kelamin){
@@ -37,5 +40,21 @@ class JenisController extends Controller
 
             return response()->json(['message' => 'ternak not found!'], 404);
         }
-}
+    }
+
+    public function detail($id){
+        try {
+            $jenis = DB::table('jenis')
+                        ->leftJoin('golongan','golongan.id','=','jenis.id_golongan')
+                        ->select('jenis.*','golongan.golongan_nama')
+                        ->where('jenis.id','=', $id)
+                        ->first();
+
+            return response()->json(['jenis' => $jenis], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'jenis not found!'], 404);
+        }
+    }
 }

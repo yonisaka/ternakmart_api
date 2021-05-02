@@ -19,7 +19,13 @@ class TransaksiController extends Controller
     }
 
     public function index(){
-        //asd
+        $data = DB::table('transaksi')
+                ->leftJoin('ternak', 'ternak.id', '=', 'transaksi.id_ternak')
+                ->leftJoin('users', 'users.id', '=', 'transaksi.id_user')
+                ->select('transaksi.*','ternak.ternak_nama','users.name')
+                ->get();
+
+        return response()->json(['transaksi' =>  $data], 200);
     }
     public function show($id){
         try {

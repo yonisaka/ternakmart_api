@@ -24,5 +24,17 @@ class GolonganController extends Controller
         return response()->json(['golongan' =>  $data], 200);
     }
 
-   
+    public function show($id){
+        try {
+            $golongan = DB::table('golongan')
+                        ->where('id','=', $id)
+                        ->first();
+
+            return response()->json(['golongan' => $golongan], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'golongan not found!'], 404);
+        }
+    }
 }

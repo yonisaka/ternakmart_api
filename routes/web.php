@@ -52,9 +52,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //Controller Golongan
     $router->get('golongan', 'GolonganController@index');
+    $router->get('golongan/{id}', 'GolonganController@show');
     //Controller Jenis
     $router->get('jenis', 'JenisController@index');
     $router->get('jenis/{id_golongan}/{jenis_kelamin}', 'JenisController@show');
+    $router->get('jenis/{id}', 'JenisController@detail');
 
     //Controller menu
     $router->get('menu', 'MenuController@index');
@@ -69,7 +71,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->delete('role_menu/{role_id}/{menu_id}', 'RoleController@destroy');
 
     //Controller Pemeriksaan
+    $router->get('pemeriksaan', 'PemeriksaanController@index');
     $router->get('pemeriksaan/{id}', 'PemeriksaanController@show');
+    $router->get('pemeriksaan/{id}/detail', 'PemeriksaanController@detail');
     $router->post('pemeriksaan', 'PemeriksaanController@store');
     $router->put('pemeriksaan/{id}', 'PemeriksaanController@update');
 
@@ -96,6 +100,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     
     //Controller Transaksi
     $router->post('transaksi', 'TransaksiController@store');
+    $router->get('transaksi', 'TransaksiController@index');
     $router->get('transaksi/{id}', 'TransaksiController@show');
 
 });
