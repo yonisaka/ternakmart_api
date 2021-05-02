@@ -20,9 +20,9 @@ class AuthController extends Controller
     public function __construct()
     {
         //
-        $this->middleware('cors');
+        // $this->middleware('cors');
     }
-    
+
     public function register(Request $request)
     {
         //validate incoming request 
