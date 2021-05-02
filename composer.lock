@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "926c0467005d3cf8b26004722c08a2a8",
+    "content-hash": "2ebd6f5abb8835ccb40cf19f217184f1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2532,6 +2532,53 @@
                 "source": "https://github.com/opis/closure/tree/3.6.1"
             },
             "time": "2020-11-07T02:01:34+00:00"
+        },
+        {
+            "name": "palanik/lumen-cors",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palanik/lumen-cors.git",
+                "reference": "5cd7a1efff091b6e7247a08e57ab39cc418af466"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palanik/lumen-cors/zipball/5cd7a1efff091b6e7247a08e57ab39cc418af466",
+                "reference": "5cd7a1efff091b6e7247a08e57ab39cc418af466",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "palanik\\lumen\\Middleware\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "palanik"
+                }
+            ],
+            "description": "Cross-origin resource sharing (CORS) middleware for Lumen micro-framework.",
+            "homepage": "https://github.com/palanik/lumen-cors",
+            "keywords": [
+                "cors",
+                "corslumen",
+                "cross-origin",
+                "laravel",
+                "lumen",
+                "lumencors",
+                "preflight"
+            ],
+            "support": {
+                "issues": "https://github.com/palanik/lumen-cors/issues",
+                "source": "https://github.com/palanik/lumen-cors/tree/v0.0.3"
+            },
+            "time": "2017-06-24T03:53:36+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -7421,6 +7468,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "palanik/lumen-cors": 20,
         "tymon/jwt-auth": 20
     },
     "prefer-stable": true,
