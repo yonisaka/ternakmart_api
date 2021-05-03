@@ -72,6 +72,8 @@ class DashboardController extends Controller
                     ->orderBy('transaksi_tanggal')
                     ->get();
         $data = json_decode(json_encode($total), true);
+
+        $arr = array();
         foreach($data as $val){
             $arr[] = $val['total'];
         }
