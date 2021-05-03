@@ -92,7 +92,7 @@ class AuthController extends Controller
             //token only
             // return $this->respondWithToken($token);
         } else {
-            return response()->json(['message' => ['Incorrect Email or Password']], 409);
+            return response()->json(['message' => ['Incorrect Email or Password']], 400);
         }
     }
 

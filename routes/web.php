@@ -104,6 +104,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('transaksi', 'TransaksiController@index');
     $router->get('transaksi/{id}', 'TransaksiController@show');
 
+    //Controller Dashboard
+    $router->get('total_ternak', 'DashboardController@total_ternak');
+    $router->get('total_transaksi', 'DashboardController@total_transaksi');
+    $router->get('total_ternak_verifikasi', 'DashboardController@total_ternak_verifikasi');
+    $router->get('total_ternak_harga_transaksi', 'DashboardController@total_ternak_harga_transaksi');
+    $router->get('total_user/{role}', 'DashboardController@total_user');
+    $router->get('total_menu', 'DashboardController@total_menu');
+    $router->get('chart_transkasi', 'DashboardController@chart_transkasi');
+
 });
 
 $router->get('/key', function() {
