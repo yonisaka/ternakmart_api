@@ -74,23 +74,27 @@ class AuthController extends Controller
         //check user
         $user = User::where('email', $email)->first();
         if ( $user && app('hash')->check($plainPassword, $user->password)){
-            //token
-            $credentials = $request->only(['email', 'password']);
-        
-            if (! $token = Auth::attempt($credentials)) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+            if ($user['user_st'] == 'Aktif'){
+                //token
+                $credentials = $request->only(['email', 'password']);
+            
+                if (! $token = Auth::attempt($credentials)) {
+                    return response()->json(['message' => 'Unauthorized'], 401);
+                }
+                
+                $user->remember_token = $token;
+                $user->save();
+                
+                return response()->json([
+                    'message' => 'Success',
+                    'user' => $user,
+                    'token' => $this->respondWithToken($token)
+                ]);
+                //token only
+                // return $this->respondWithToken($token);
+            } else {
+                return response()->json(['message' => ['User Belum di verifikasi / Tidak Aktif']], 400);
             }
-            
-            $user->remember_token = $token;
-            $user->save();
-            
-            return response()->json([
-                'message' => 'Success',
-                'user' => $user,
-                'token' => $this->respondWithToken($token)
-            ]);
-            //token only
-            // return $this->respondWithToken($token);
         } else {
             return response()->json(['message' => ['Incorrect Email or Password']], 400);
         }
