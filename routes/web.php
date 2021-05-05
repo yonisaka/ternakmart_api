@@ -40,7 +40,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('users/{id}', 'UserController@singleUser');
     $router->get('users', 'UserController@allUsers');
     $router->delete('users/{id}', 'UserController@destroy');
-    $router->post('users', 'UserController@store');
+    // $router->post('users', 'UserController@store');
     $router->put('users/{id}', 'UserController@update');
 
     //Controller Ternak
@@ -102,7 +102,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //Controller Transaksi
     $router->post('transaksi', 'TransaksiController@store');
     $router->get('transaksi', 'TransaksiController@index');
-    $router->get('transaksi/{id}', 'TransaksiController@show');
+    $router->get('transaksi/{id}', 'TransaksiController@show'); //show transaksi by id user
+    $router->get('transaksi/{id}/detail', 'TransaksiController@detail_transaksi'); //show transaksi by id transaksi
+    $router->put('transaksi/{id}/billing', 'TransaksiController@addBilling'); //
 
     //Controller Dashboard
     $router->get('total_ternak', 'DashboardController@total_ternak');
