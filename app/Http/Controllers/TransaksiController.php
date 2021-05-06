@@ -97,5 +97,70 @@ class TransaksiController extends Controller
         }
     }
 
+    public function waiting($id){
+        try {
+            $query = DB::table('transaksi')
+                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
+                    'ternak.file_path')
+                    ->where('transaksi.id_user','=',$id)
+                    ->where('transaksi.transaksi_st','=', "waiting_payment");
+            $cart = $query->get();
+            $count = $query->count();
+
+            return response()->json(['cart' => $cart, 'counts' => $count], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => $e], 404);
+        }
+    }
+    public function confirmation($id){
+        try {
+            $query = DB::table('transaksi')
+                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
+                    'ternak.file_path')
+                    ->where('transaksi.id_user','=',$id)
+                    ->where('transaksi.transaksi_st','=', "confirmation");
+            $cart = $query->get();
+            $count = $query->count();
+
+            return response()->json(['cart' => $cart, 'counts' => $count], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => $e], 404);
+        }
+    }
+
+    public function getToken(){
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-EVovFI-eT7n5eLm6J_VaFKyw';
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+        
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => 12000,
+            ),
+            'customer_details' => array(
+                'first_name' => 'budi',
+                'last_name' => 'pratama',
+                'email' => 'budi.pra@example.com',
+                'phone' => '08111222333',
+            ),
+        );
+        
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        return response()->json(['message' => $snapToken], 200);
+
+    }
+
     //
 }

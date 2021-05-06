@@ -106,7 +106,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('transaksi/{id}/detail', 'TransaksiController@detail_transaksi'); //show transaksi by id transaksi
     $router->put('transaksi/{id}/billing', 'TransaksiController@addBilling'); //
     $router->get('transaksi/{id}/waiting', 'TransaksiController@waiting');
-    $router->get('transaksi/{id}/confirmation', 'TransaksiController@show');
+    $router->get('transaksi/{id}/confirmation', 'TransaksiController@confirmation');
+    $router->get('transaksi/getToken', 'TransaksiController@getToken');
 
     //Controller Dashboard
     $router->get('total_ternak', 'DashboardController@total_ternak');
