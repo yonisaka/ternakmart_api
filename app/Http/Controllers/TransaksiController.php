@@ -69,5 +69,33 @@ class TransaksiController extends Controller
         //asd
     }
 
+    public function detail_transaksi($id){
+        try {
+            $query = DB::table('transaksi')
+                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
+                    'ternak.file_path')
+                    ->where('transaksi.id','=',$id)
+                    ->where('transaksi.transaksi_st','=', "cart");
+            $cart = $query->first();
+
+            return response()->json(['cart' => $cart], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => $e], 404);
+        }
+    }
+
+    public function addBilling($id){
+        $affected = DB::table('transaksi')
+                    ->where('id', $id)
+                    ->update(['transaksi_st' => "waiting_payment",
+                    'transaksi_tanggal' => date("Y-m-d")]);
+        if($affected){
+            return response()->json(['message' => "Success membuat billing"], 200);
+        }
+    }
+
     //
 }

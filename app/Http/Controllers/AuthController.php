@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         } catch (\Exception $e) {
             //return error message
-            return response()->json(['message' => $e], 409);
+            return response()->json(['message' => "asd"], 409);
         }
 
     }
