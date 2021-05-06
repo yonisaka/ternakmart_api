@@ -163,7 +163,7 @@ class TransaksiController extends Controller
         }
     }
 
-    public function getToken(){
+    public function getToken(Request $request){
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = 'SB-Mid-server-EVovFI-eT7n5eLm6J_VaFKyw';
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
@@ -175,19 +175,25 @@ class TransaksiController extends Controller
         
         $params = array(
             'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => 12000,
+                'order_id' => $request->input('order_id'),
+                'gross_amount' => $request->input('gross_amount'),
             ),
             'customer_details' => array(
-                'first_name' => 'budi',
-                'last_name' => 'pratama',
-                'email' => 'budi.pra@example.com',
-                'phone' => '08111222333',
+                'first_name' => $request->input('name'),
+                'last_name' => $request->input('last_name'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
             ),
         );
+        try{
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            return response()->json(['token' => $snapToken], 200);
+        }
+        catch (\Exception $e) {
+
+            return response()->json(['message' => $e], 404);
+        }
         
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        return response()->json(['message' => $snapToken], 200);
 
     }
 
