@@ -116,7 +116,9 @@ class AuthController extends Controller
             foreach ($main_nav as $key => $data) {
                 $data = json_decode(json_encode($data), true);
                 $rs_id = DB::table('menu')
+                        ->leftJoin('role_menu', 'menu.id', '=', 'role_menu.menu_id')
                         ->where('parent_id',$data['id'])
+                        ->where('role_id',$role_id)
                         ->get();
                 $rs_id = json_decode(json_encode($rs_id), true);
                 $res[$key] = $data;

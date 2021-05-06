@@ -51,7 +51,12 @@ class DokterController extends Controller
         ]);
 
         try {
-
+            // upload file
+            $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
+            $path = 'dokter';
+            $file->move($path,$filename);
+            //
             $data = new Dokter;
             $data->nama_lengkap = $request->input('nama_lengkap');
             $data->nomor_hp = $request->input('nomor_hp');
@@ -59,6 +64,8 @@ class DokterController extends Controller
             $data->alamat = $request->input('alamat');
             $data->jenis_kelamin = $request->input('jenis_kelamin');
             $data->id_user = $request->input('id_user');
+            $data->file_name = $filename;
+            $data->file_path = url('/').'/'.$path.'/'.$filename;
 
             $data->save();
 
@@ -84,14 +91,26 @@ class DokterController extends Controller
         ]);
 
         try {
-
             $data = Dokter::where('id', $id)->first();
+            // upload file
+            if ($request->file('file')){
+                $file = $request->file('file');
+                $filename = $file->getClientOriginalName();
+                $path = 'dokter';
+                $file->move($path,$filename);
+            } else {
+                $filename = $data->file_name;
+                $path = 'dokter';
+            }
+            //
             $data->nama_lengkap = $request->input('nama_lengkap');
             $data->nomor_hp = $request->input('nomor_hp');
             $data->tanggal_lahir = $request->input('tanggal_lahir');
             $data->alamat = $request->input('alamat');
             $data->jenis_kelamin = $request->input('jenis_kelamin');
             $data->id_user = $request->input('id_user');
+            $data->file_name = $filename;
+            $data->file_path = url('/').'/'.$path.'/'.$filename;
 
             $data->save();
 
