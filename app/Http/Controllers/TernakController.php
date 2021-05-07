@@ -65,7 +65,13 @@ class TernakController extends Controller
             'harga_pengajuan' => 'required|numeric',
             'tgl_penerimaan' => 'required|date',
         ]);
-
+        // if (isset($request->validator) && $request->validator->fails()) {
+        //     return response()->json([
+        //         'error_code'=> 'VALIDATION_ERROR', 
+        //         'message'   => 'The given data was invalid.', 
+        //         'errors'    => $request->validator->errors()
+        //     ]);
+        // }
         try {
             // upload file
             $file = $request->file('file');
@@ -117,7 +123,7 @@ class TernakController extends Controller
             'harga_pengajuan' => 'required|numeric',
             'tgl_penerimaan' => 'required|date',
         ]);
-
+        
         try {
             $data = Ternak::where('id', $id)->first();
             // upload file
