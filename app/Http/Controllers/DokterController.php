@@ -44,6 +44,7 @@ class DokterController extends Controller
         //validate incoming request 
         $this->validate($request, [
             'nama_lengkap' => 'required|string',
+            'strv' => 'required',
             'nomor_hp' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
@@ -59,6 +60,7 @@ class DokterController extends Controller
             //
             $data = new Dokter;
             $data->nama_lengkap = $request->input('nama_lengkap');
+            $data->strv = $request->input('strv');
             $data->nomor_hp = $request->input('nomor_hp');
             $data->tanggal_lahir = $request->input('tanggal_lahir');
             $data->alamat = $request->input('alamat');
@@ -84,6 +86,7 @@ class DokterController extends Controller
         //validate incoming request 
         $this->validate($request, [
             'nama_lengkap' => 'required|string',
+            'strv' => 'required',
             'nomor_hp' => 'required',
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
@@ -104,6 +107,7 @@ class DokterController extends Controller
             }
             //
             $data->nama_lengkap = $request->input('nama_lengkap');
+            $data->strv = $request->input('strv');
             $data->nomor_hp = $request->input('nomor_hp');
             $data->tanggal_lahir = $request->input('tanggal_lahir');
             $data->alamat = $request->input('alamat');
