@@ -54,7 +54,6 @@ class TernakController extends Controller
     public function store(Request $request){
         //validate incoming request 
         $this->validate($request, [
-            'rfid' => 'required',
             'ternak_nama' => 'required|string',
             'id_jenis' => 'required',
             'jenis_kelamin' => 'required',
