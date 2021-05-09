@@ -120,6 +120,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('total_menu', 'DashboardController@total_menu');
     $router->get('chart_transkasi', 'DashboardController@chart_transkasi');
 
+    //Kota
+    $router->post('kota', 'KotaController@store');
 });
 
 $router->get('/key', function() {
