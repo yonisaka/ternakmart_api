@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kota extends Model
+class Lokasi extends Model
 {
-    protected $table = 'kota';
+    protected $table = 'lokasi';
     public $timestamps = false;
     
 }

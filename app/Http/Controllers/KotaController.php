@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Kota;
+use App\Models\Lokasi;
 use Illuminate\Support\Facades\DB;
 
-class KotaController extends Controller
+class LokasiController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -26,7 +26,7 @@ class KotaController extends Controller
         $total = count($request->all());
 
         for ($i = 0; $i < $total; $i++) {
-            $data = new Kota();
+            $data = new Lokasi();
             $data->city_id = $request[$i]['city_id'];
             $data->province_id = $request[$i]['province_id'];
             $data->province = $request[$i]['province'];
@@ -37,7 +37,7 @@ class KotaController extends Controller
             $data->save();
         }
         // try {
-            // $data = new Kota();
+            // $data = new Lokasi();
             // $data->city_id = $request->input('city_id');
             // $data->province_id = $request->input('province_id');
             // $data->province = $request->input('province');
