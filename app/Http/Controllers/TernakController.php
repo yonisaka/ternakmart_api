@@ -43,7 +43,8 @@ class TernakController extends Controller
                 $ternak = DB::table('ternak')
                         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
                         ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
-                        ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama')
+                        ->leftJoin('lokasi', 'ternak.city_id','=','lokasi.city_id')
+                        ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama','lokasi.city_name')
                         ->where('ternak.id','=',$id)
                         ->first();
     
@@ -98,6 +99,8 @@ class TernakController extends Controller
             $data->ternak_harga = $request->input('ternak_harga');
             $data->harga_perkilo = $request->input('harga_perkilo');
             $data->tgl_penerimaan = $request->input('tgl_penerimaan');
+            $data->province_id = $request->input('province_id');
+            $data->city_id = $request->input('city_id');
             $data->tgl_keluar = $request->input('tgl_keluar');
             $data->file_name = $filename;
             $data->file_path = url('/').'/'.$path.'/'.$filename;
@@ -156,6 +159,8 @@ class TernakController extends Controller
             $data->ternak_harga = empty($request->input('ternak_harga')) ? $data->ternak_harga : $request->input('ternak_harga');
             $data->harga_perkilo = empty($request->input('harga_perkilo')) ? $data->harga_perkilo : $request->input('harga_perkilo');
             $data->tgl_penerimaan = empty($request->input('tgl_penerimaan')) ? $data->tgl_penerimaan : $request->input('tgl_penerimaan');
+            $data->province_id = empty($request->input('province_id')) ? $data->province_id : $request->input('province_id');
+            $data->city_id = empty($request->input('city_id')) ? $data->city_id : $request->input('city_id');
             $data->tgl_keluar = empty($request->input('tgl_keluar')) ? $data->tgl_keluar : $request->input('tgl_keluar');
             $data->file_name = $filename;
             $data->file_path = url('/').'/'.$path.'/'.$filename;
