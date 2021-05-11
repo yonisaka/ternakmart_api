@@ -111,6 +111,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('transaksi/{id}/waiting', 'TransaksiController@waiting');
     $router->get('transaksi/{id}/confirmation', 'TransaksiController@confirmation');
     $router->post('transaksi_getToken', 'TransaksiController@getToken');
+    $router->post('transaksi_updateToken', 'TransaksiController@updateToken');
 
     //Controller Dashboard
     $router->get('total_ternak', 'DashboardController@total_ternak');
