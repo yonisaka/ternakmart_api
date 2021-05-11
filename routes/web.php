@@ -121,12 +121,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('total_menu', 'DashboardController@total_menu');
     $router->get('chart_transkasi', 'DashboardController@chart_transkasi');
 
+<<<<<<< HEAD
     //Controller Midtrans
     $router->post('notification/payment', 'MidtransController@paymentHandling');
 
     //Controller Ongkir
     $router->get('lokasi', 'LokasiController@index');
 
+=======
+    //Kota
+    $router->post('kota', 'KotaController@store');
+>>>>>>> de624532498f49c5fbd57277cfb3b94ca0e01673
 });
 
 $router->get('/key', function() {
