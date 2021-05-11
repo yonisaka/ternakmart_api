@@ -190,7 +190,7 @@ class TernakController extends Controller
                     ->where('ternak.ternak_nama','like', '%'.$request->input('search').'%')
                     ->get();
 
-            return response()->json(['ternak' => $ternak], 401);
+            return response()->json(['ternak' => $ternak], 200);
 
         } catch (\Exception $e) {
 

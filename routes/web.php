@@ -104,7 +104,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('transaksi', 'TransaksiController@index');
     $router->get('transaksi/{id}/detail', 'TransaksiController@detail');
     $router->put('transaksi/{id}', 'TransaksiController@update');
-    $router->get('transaksi/{id}', 'TransaksiController@show'); //show transaksi by id user
+    $router->get('transaksi/{id}', 'TransaksiController@show'); //show all transaksi by id user
+    $router->get('transaksi/{id}/cart', 'TransaksiController@cart'); //show cart transaksi by id user 
     $router->get('transaksi/{id}/detail', 'TransaksiController@detail_transaksi'); //show transaksi by id transaksi
     $router->put('transaksi/{id}/billing', 'TransaksiController@addBilling'); //
     $router->get('transaksi/{id}/waiting', 'TransaksiController@waiting');
@@ -119,6 +120,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('total_user/{role}', 'DashboardController@total_user');
     $router->get('total_menu', 'DashboardController@total_menu');
     $router->get('chart_transkasi', 'DashboardController@chart_transkasi');
+
+    //Controller Midtrans
+    $router->post('notification/payment', 'MidtransController@paymentHandling');
+
+    //Controller Ongkir
+    $router->get('lokasi', 'LokasiController@index');
 
 });
 

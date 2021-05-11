@@ -34,6 +34,25 @@ class TransaksiController extends Controller
                     ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
                     'ternak.file_path')
+                    ->where('transaksi.id_user','=',$id);
+                    // ->where('transaksi.transaksi_st','=', "cart");
+            $cart = $query->get();
+            $count = $query->count();
+
+            return response()->json(['cart' => $cart, 'counts' => $count], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => $e], 404);
+        }
+    }
+
+    public function cart($id){
+        try {
+            $query = DB::table('transaksi')
+                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
+                    'ternak.file_path')
                     ->where('transaksi.id_user','=',$id)
                     ->where('transaksi.transaksi_st','=', "cart");
             $cart = $query->get();
@@ -46,6 +65,7 @@ class TransaksiController extends Controller
             return response()->json(['message' => $e], 404);
         }
     }
+
     public function detail($id){
         try {
             $transaksi = DB::table('transaksi')
@@ -74,6 +94,8 @@ class TransaksiController extends Controller
         // $data->total_harga = $request->input('total_harga');
         $data->transaksi_st = $request->input('transaksi_st');
         $data->transaksi_alamat = $request->input('transaksi_alamat');
+        $data->order_id = $request->input('order_id');
+        $data->transaksi_token = $request->input('transaksi_token');
 
         $data->save();
 
@@ -104,8 +126,8 @@ class TransaksiController extends Controller
                     ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
                     'ternak.file_path')
-                    ->where('transaksi.id','=',$id)
-                    ->where('transaksi.transaksi_st','=', "cart");
+                    ->where('transaksi.id','=',$id);
+                    // ->where('transaksi.transaksi_st','=', "cart");
             $cart = $query->first();
 
             return response()->json(['cart' => $cart], 200);
