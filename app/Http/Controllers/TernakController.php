@@ -51,7 +51,7 @@ class TernakController extends Controller
                                 )c ON a.id = c.id_ternak
                                 LEFT JOIN dokter d ON c.id_dokter = d.id
                                 WHERE a.id = '$id'
-                                ")
+                                ")[0]
                                 ;
                             
                 // $ternak = DB::table('ternak')
