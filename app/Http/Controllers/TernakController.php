@@ -39,14 +39,28 @@ class TernakController extends Controller
     }
 
     public function show($id){
+        
             try {
-                $ternak = DB::table('ternak')
-                        ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
-                        ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
-                        ->leftJoin('lokasi', 'ternak.city_id','=','lokasi.city_id')
-                        ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama','lokasi.city_name')
-                        ->where('ternak.id','=',$id)
-                        ->first();
+                $ternak = DB::select("SELECT a.*, b.jenis_nama, c.tgl_pemeriksaan, c.id_dokter, d.nama_lengkap AS dokter_nama 
+                                FROM ternak a
+                                LEFT JOIN jenis b ON a.id_jenis = b.id
+                                LEFT JOIN (
+                                    SELECT id_ternak, MAX(id_dokter) AS id_dokter, MAX(tgl_pemeriksaan) AS tgl_pemeriksaan, MAX(id) AS id_pemeriksaan FROM
+                                    pemeriksaan 
+                                    GROUP BY id_ternak
+                                )c ON a.id = c.id_ternak
+                                LEFT JOIN dokter d ON c.id_dokter = d.id
+                                WHERE a.id = '$id'
+                                ")
+                                ;
+                            
+                // $ternak = DB::table('ternak')
+                //         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
+                //         ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
+                //         ->leftJoin('lokasi', 'ternak.city_id','=','lokasi.city_id')
+                //         ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama','lokasi.city_name')
+                //         ->where('ternak.id','=',$id)
+                //         ->first();
     
                 return response()->json(['ternak' => $ternak], 200);
     
@@ -132,6 +146,7 @@ class TernakController extends Controller
         
         try {
             $data = Ternak::where('id', $id)->first();
+            
             // upload file
             if ($request->file('file')){
                 $file = $request->file('file');

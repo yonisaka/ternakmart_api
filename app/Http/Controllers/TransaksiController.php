@@ -28,6 +28,19 @@ class TransaksiController extends Controller
 
         return response()->json(['transaksi' =>  $data], 200);
     }
+    public function pengiriman(){
+        $data = DB::select("SELECT a.*, b.jenis_nama, c.tgl_pemeriksaan, c.id_dokter, d.nama_lengkap AS dokter_nama FROM ternak a
+                            LEFT JOIN jenis b ON a.id_jenis = b.id
+                            LEFT JOIN (
+                                SELECT id_ternak, MAX(id_dokter) AS id_dokter, MAX(tgl_pemeriksaan) AS tgl_pemeriksaan, MAX(id) AS id_pemeriksaan FROM
+                                pemeriksaan 
+                                GROUP BY id_ternak
+                            )c ON a.id = c.id_ternak
+                            LEFT JOIN dokter d ON c.id_dokter = d.id")
+                            ;
+
+        return response()->json(['pengiriman' =>  $data], 200);
+    }
     public function show($id){
         try {
             $query = DB::table('transaksi')

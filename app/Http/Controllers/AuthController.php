@@ -118,6 +118,7 @@ class AuthController extends Controller
                 $rs_id = DB::table('menu')
                         ->leftJoin('role_menu', 'menu.id', '=', 'role_menu.menu_id')
                         ->where('parent_id',$data['id'])
+                        ->where('status','1')
                         ->where('role_id',$role_id)
                         ->get();
                 $rs_id = json_decode(json_encode($rs_id), true);
