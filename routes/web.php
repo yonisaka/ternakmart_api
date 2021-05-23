@@ -128,6 +128,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('lokasi', 'LokasiController@index');
     $router->get('lokasi/provinsi', 'LokasiController@provinsi');
     $router->get('lokasi/kota/{province_id}', 'LokasiController@kota');
+    $router->get('lokasi/kota/{city_id}/detail', 'LokasiController@detail_kota');
 
 });
 

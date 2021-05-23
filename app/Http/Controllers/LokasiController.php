@@ -36,9 +36,18 @@ class LokasiController extends Controller
 
     public function kota($province_id){
         $data = DB::table('lokasi')
-                ->select('city_id', 'type', 'city_name', 'postal_code')
+                ->select('city_id', 'type', 'city_name', 'postal_code','latitude','longitude')
                 ->where('province_id', $province_id)
                 ->get();
+
+        return response()->json(['kota' =>  $data], 200);
+    }
+
+    public function detail_kota($city_id){
+        $data = DB::table('lokasi')
+                ->select('city_id', 'type', 'city_name', 'postal_code','latitude','longitude')
+                ->where('city_id', $city_id)
+                ->first();
 
         return response()->json(['kota' =>  $data], 200);
     }

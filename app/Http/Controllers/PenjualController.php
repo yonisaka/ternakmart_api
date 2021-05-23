@@ -19,7 +19,11 @@ class PenjualController extends Controller
     }
 
     public function index(){
-        $data = Penjual::all();
+        $data = DB::table('penjual')
+                ->leftJoin('users','users.id','=','penjual.id_user')
+                ->select('penjual.*', 'users.user_st')
+                ->get();
+        // $data = Penjual::all();
 
         return response()->json(['penjual' =>  $data], 200);
     }

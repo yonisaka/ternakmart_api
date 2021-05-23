@@ -19,7 +19,11 @@ class DokterController extends Controller
     }
 
     public function index(){
-        $data = Dokter::all();
+        $data = DB::table('dokter')
+                    ->leftJoin('users','users.id','=','dokter.id_user')
+                    ->select('dokter.*', 'users.user_st')
+                    ->get();
+        // $data = Dokter::all();
 
         return response()->json(['dokter' =>  $data], 200);
     }

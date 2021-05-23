@@ -19,7 +19,11 @@ class CustomerController extends Controller
     }
 
     public function index(){
-        $data = Customer::all();
+        $data = DB::table('customer')
+                ->leftJoin('users','users.id','=','customer.id_user')
+                ->select('customer.*', 'users.user_st')
+                ->get();
+        // $data = Customer::all();
 
         return response()->json(['customer' =>  $data], 200);
     }

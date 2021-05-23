@@ -64,8 +64,9 @@ class TransaksiController extends Controller
         try {
             $query = DB::table('transaksi')
                     ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+                    ->leftJoin('lokasi', 'transaksi.city_id', '=', 'lokasi.city_id')
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
-                    'ternak.file_path')
+                    'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
                     ->where('transaksi.id_user','=',$id)
                     ->where('transaksi.transaksi_st','=', "cart");
             $cart = $query->get();
@@ -106,7 +107,13 @@ class TransaksiController extends Controller
         $data->total_harga = $request->input('total_harga');
         // $data->total_harga = $request->input('total_harga');
         $data->transaksi_st = $request->input('transaksi_st');
-        $data->transaksi_alamat = $request->input('transaksi_alamat');
+        $data->nama_penerima = $request->input('nama_penerima');
+        $data->province_id = $request->input('province_id');
+        $data->city_id = $request->input('city_id');
+        $data->detail_alamat = $request->input('detail_alamat');
+        $data->transaksi_note = $request->input('transaksi_note');
+        $data->distance = $request->input('distance');
+        $data->harga_ongkir = $request->input('harga_ongkir');
         $data->order_id = $request->input('order_id');
         $data->transaksi_token = $request->input('transaksi_token');
 
@@ -123,7 +130,13 @@ class TransaksiController extends Controller
         $data->total_harga = $request->input('total_harga');
         // $data->total_harga = $request->input('total_harga');
         $data->transaksi_st = $request->input('transaksi_st');
-        $data->transaksi_alamat = $request->input('transaksi_alamat');
+        $data->nama_penerima = $request->input('nama_penerima');
+        $data->province_id = $request->input('province_id');
+        $data->city_id = $request->input('city_id');
+        $data->detail_alamat = $request->input('detail_alamat');
+        $data->transaksi_note = $request->input('transaksi_note');
+        $data->distance = $request->input('distance');
+        $data->harga_ongkir = $request->input('harga_ongkir');
 
         $data->save();
 
