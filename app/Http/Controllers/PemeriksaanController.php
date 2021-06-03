@@ -57,27 +57,27 @@ class PemeriksaanController extends Controller
 
     public function store(Request $request){
         //validate incoming request 
-        $this->validate($request, [
-            'anamnesa' => 'required',
-            'ekspresi_muka' => 'required',
-            'kondisi_badan' => 'required',
-            'pulsus' => 'required',
-            'crt' => 'required',
-            'kelenjar_limfe' => 'required',
-            'alat_pernafasan' => 'required',
-            'alat_peredaran_darah' => 'required',
-            'alat_pencernaan' => 'required',
-            'alat_kelamin_perkencingan' => 'required',
-            'saraf' => 'required',
-            'anggota_gerak' => 'required',
-            'lain_lain' => 'required',
-            'diagnosa_awal' => 'required',
-            'pemeriksaan_lab' => 'required',
-            'diagnosa_akhir' => 'required',
-            'prognosa' => 'required',
-            'tindakan_lainnya' => 'required',
-            'tgl_pemeriksaan' => 'required|date',
-        ]);
+        // $this->validate($request, [
+        //     'anamnesa' => 'required',
+        //     'ekspresi_muka' => 'required',
+        //     'kondisi_badan' => 'required',
+        //     'pulsus' => 'required',
+        //     'crt' => 'required',
+        //     'kelenjar_limfe' => 'required',
+        //     'alat_pernafasan' => 'required',
+        //     'alat_peredaran_darah' => 'required',
+        //     'alat_pencernaan' => 'required',
+        //     'alat_kelamin_perkencingan' => 'required',
+        //     'saraf' => 'required',
+        //     'anggota_gerak' => 'required',
+        //     'lain_lain' => 'required',
+        //     'diagnosa_awal' => 'required',
+        //     'pemeriksaan_lab' => 'required',
+        //     'diagnosa_akhir' => 'required',
+        //     'prognosa' => 'required',
+        //     'tindakan_lainnya' => 'required',
+        //     'tgl_pemeriksaan' => 'required|date',
+        // ]);
         // try {
             $data = new Pemeriksaan();
             $data->id_ternak = $request->input('id_ternak');
@@ -112,28 +112,28 @@ class PemeriksaanController extends Controller
     }
 
     public function update(Request $request, $id){
-        $this->validate($request, [
-            'anamnesa' => 'required',
-            'ekspresi_muka' => 'required',
-            'kondisi_badan' => 'required|numeric',
-            'pulsus' => 'required|date',
-            'crt' => 'required',
-            'kelenjar_limfe' => 'required|numeric',
-            'alat_pernafasan' => 'required',
-            'alat_peredaran_darah' => 'required',
-            'alat_pencernaan' => 'required',
-            'alat_kelamin_perkencingan' => 'required',
-            'saraf' => 'required',
-            'anggota_gerak' => 'required',
-            'lain_lain' => 'required',
-            'diagnosa_awal' => 'required',
-            'pemeriksaan_lab' => 'required',
-            'diagnosa_akhir' => 'required',
-            'prognosa' => 'required',
-            'tindakan_lainnya' => 'required',
-            'terapi' => 'required',
-            'tgl_pemeriksaan' => 'required|date',
-        ]);
+        // $this->validate($request, [
+        //     'anamnesa' => 'required',
+        //     'ekspresi_muka' => 'required',
+        //     'kondisi_badan' => 'required|numeric',
+        //     'pulsus' => 'required|date',
+        //     'crt' => 'required',
+        //     'kelenjar_limfe' => 'required|numeric',
+        //     'alat_pernafasan' => 'required',
+        //     'alat_peredaran_darah' => 'required',
+        //     'alat_pencernaan' => 'required',
+        //     'alat_kelamin_perkencingan' => 'required',
+        //     'saraf' => 'required',
+        //     'anggota_gerak' => 'required',
+        //     'lain_lain' => 'required',
+        //     'diagnosa_awal' => 'required',
+        //     'pemeriksaan_lab' => 'required',
+        //     'diagnosa_akhir' => 'required',
+        //     'prognosa' => 'required',
+        //     'tindakan_lainnya' => 'required',
+        //     'terapi' => 'required',
+        //     'tgl_pemeriksaan' => 'required|date',
+        // ]);
         try {
             $data = Pemeriksaan::where('id_ternak', $id)->first();
             $data->id_dokter = empty($request->input('id_dokter')) ? $data->id_dokter : $request->input('id_dokter');
