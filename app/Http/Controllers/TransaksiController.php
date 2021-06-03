@@ -143,6 +143,7 @@ class TransaksiController extends Controller
 
         return response()->json(['message' => 'Berhasil Update Data'], 200);
     }
+
     public function destroy($id){
         //asd
     }
@@ -234,16 +235,38 @@ class TransaksiController extends Controller
                 'phone' => $request->input('phone'),
             ),
         );
-        try{
+
+        $query = DB::table('transaksi')
+                    ->select('transaksi_token')
+                    ->where('order_id','=',$request->input('order_id'));
+        $isTokenize = $query->first();
+
+        if($isTokenize->transaksi_token == null){
             $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $affected = DB::table('transaksi')
+              ->where('order_id', $request->input('order_id'))
+              ->update(['transaksi_token' => $snapToken]);
             return response()->json(['token' => $snapToken], 200);
         }
-        catch (\Exception $e) {
+        else{
+            $query = DB::table('transaksi')
+            ->select('transaksi_token')
+            ->where('order_id','=',$request->input('order_id'));
+            $token = $query->first();
 
-            return response()->json(['message' => $e], 404);
+            return response()->json(['token' => $token->transaksi_token ],  200);
+        }
+            
+    }
+
+    public function updateToken(Request $request){
+        $affected = DB::table('transaksi')
+              ->where('id', $request->input('id'))
+              ->update(['transaksi_token' => $request->input('token')]);
+        if($affected){
+            return response()->json(['message' => 'Berhasil Update Data'], 200);
         }
         
-
     }
 
     //
