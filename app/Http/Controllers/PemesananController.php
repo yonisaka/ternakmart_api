@@ -44,6 +44,7 @@ class PemesananController extends Controller
             $data->jumlah_kambing = $request->input('jumlah_kambing');
             $data->kurban_domba = $request->input('kurban_domba');
             $data->jumlah_domba = $request->input('jumlah_domba');
+            $data->tgl_pengiriman = $request->input('tgl_pengiriman');
 
             $data->save();
 

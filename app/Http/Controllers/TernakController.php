@@ -41,7 +41,7 @@ class TernakController extends Controller
     public function show($id){
         
             try {
-                $ternak = DB::select("SELECT a.*, b.jenis_nama, c.tgl_pemeriksaan, c.id_dokter, d.nama_lengkap AS dokter_nama, e.latitude, e.longitude
+                $ternak = DB::select("SELECT a.*, b.jenis_nama, b.perawatan_harga, c.tgl_pemeriksaan, c.id_dokter, d.nama_lengkap AS dokter_nama, e.latitude, e.longitude
                                 FROM ternak a
                                 LEFT JOIN jenis b ON a.id_jenis = b.id
                                 LEFT JOIN (
