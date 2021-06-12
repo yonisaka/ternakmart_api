@@ -134,6 +134,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //Controller Pemesanan
     $router->post('pemesanan', 'PemesananController@store');
+    
+    //Controller Device RFID
+    $router->post('logrfid', 'DeviceController@store');
+
 });
 
 $router->get('/key', function() {
