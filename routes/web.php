@@ -113,6 +113,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('transaksi/{id}/confirmation', 'TransaksiController@confirmation');
     $router->post('transaksi_getToken', 'TransaksiController@getToken');
     $router->post('transaksi_updateToken', 'TransaksiController@updateToken');
+    $router->post('transaksi_createinvoice', 'TransaksiController@createInvoice');
 
     //Controller Dashboard
     $router->get('total_ternak', 'DashboardController@total_ternak');
@@ -125,18 +126,22 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //Controller Midtrans
     $router->post('notification/payment', 'MidtransController@paymentHandling');
-
+    
     //Controller Ongkir
     $router->get('lokasi', 'LokasiController@index');
     $router->get('lokasi/provinsi', 'LokasiController@provinsi');
     $router->get('lokasi/kota/{province_id}', 'LokasiController@kota');
     $router->get('lokasi/kota/{city_id}/detail', 'LokasiController@detail_kota');
-
+    
     //Controller Pemesanan
     $router->post('pemesanan', 'PemesananController@store');
     
     //Controller Device RFID
     $router->post('logrfid', 'DeviceController@store');
+    
+    //Controller Xendit
+    $router->post('callback/invoice', 'XenditController@paymentHandling');
+
 
 });
 
