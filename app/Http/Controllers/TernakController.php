@@ -203,16 +203,34 @@ class TernakController extends Controller
     }
 
     public function search(Request $request){
+        $ukuran = $request->input('ukuran');
+        if ($ukuran == '<400'){
+            $uk1 = '250';
+            $uk2 = '400';
+        } elseif ($ukuran == '<500'){
+            $uk1 = '401';
+            $uk2 = '500';
+        } elseif ($ukuran == '<650'){
+            $uk1 = '501';
+            $uk2 = '650';
+        } else {
+            $uk1 = '651';
+            $uk2 = '1000';
+        }
         try {
-            $ternak = DB::table('ternak')
+            $query = DB::table('ternak')
                     ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
                     ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
                     ->leftJoin('dokter', 'ternak.id_dokter', '=', 'dokter.id')
                     ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama',
                     'dokter.nama_lengkap')
-                    ->where('ternak.ternak_nama','like', '%'.$request->input('search').'%')
-                    ->get();
+                    ->where('ternak.ternak_nama','like', '%'.$request->input('nama').'%');
 
+            if ($ukuran != ''){
+                $query->whereBetween('ternak.ternak_berat',[$uk1, $uk2]);
+            }
+
+            $ternak = $query->get();
             return response()->json(['ternak' => $ternak], 200);
 
         } catch (\Exception $e) {
