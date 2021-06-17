@@ -347,7 +347,7 @@ class TransaksiController extends Controller
             ->where('transaksi.order_id', $request->input('order_id'))
             ->get();
             $url['invoice_url'] = $transaksiInvoice[0]->invoice_url;
-            return response()->json(['Response' => json_decode($response)], 200);
+            return response()->json(['Response' => $url], 200);
         }
         
 
