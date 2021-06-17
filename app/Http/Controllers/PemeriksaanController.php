@@ -81,6 +81,8 @@ class PemeriksaanController extends Controller
         // try {
             $data = new Pemeriksaan();
             $data->id_ternak = $request->input('id_ternak');
+            $data->id_dokter = $request->input('id_dokter');
+            $data->id_admin = $request->input('id_admin');
             $data->anamnesa = $request->input('anamnesa');
             $data->ekspresi_muka = $request->input('ekspresi_muka');
             $data->kondisi_badan = $request->input('kondisi_badan');
