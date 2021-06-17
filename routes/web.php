@@ -49,7 +49,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('ternak', 'TernakController@store');
     $router->put('ternak/{id}', 'TernakController@update');
     $router->delete('ternak/{id}', 'TernakController@destroy');
-    $router->get('cariternak', 'TernakController@search');
+    $router->post('cariternak', 'TernakController@search');
 
     //Controller Golongan
     $router->get('golongan', 'GolonganController@index');
