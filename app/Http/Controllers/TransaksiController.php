@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\Xendit;
+use App\Models\Invoices;
 use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
@@ -70,8 +71,8 @@ class TransaksiController extends Controller
                     ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
                     'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
-                    ->where('transaksi.id_user','=',$id)
-                    ->where('transaksi.transaksi_st','=', "cart");
+                    ->where('transaksi.id_user','=',$id);
+                    // ->where('transaksi.transaksi_st','=', "cart");
             $cart = $query->get();
             $count = $query->count();
 
@@ -282,45 +283,80 @@ class TransaksiController extends Controller
             'description' => $request->input('description'),
         );
 
-        $curl = curl_init();
+        $transaksi = DB::table('transaksi')
+            // ->join('invoices', 'transaksi.invoice', '=', 'invoices.invoice')
+            ->select('transaksi.*')
+            ->where('transaksi.order_id', $request->input('order_id'))
+            ->get();
 
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://api.xendit.co/v2/invoices',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>json_encode($data),
-        CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json',
-            'Authorization: Basic eG5kX2RldmVsb3BtZW50X3dhdzlucmJ0TlNRQk5VVmJvNDdoUXdrVXdQcWRNNTVkQ0lWM0RORk5lVFBEa2w1Sndad2VST25RYWE0aW1qZUY6',
-            'Cookie: visid_incap_2182539=f5doSCL4TcW2shUF74hn0cq5wWAAAAAAQUIPAAAAAAAdtoEduPjphkSZEy6WRCyn'
-        ),
-        ));
+        if($transaksi[0]->invoice ==null){
+            $curl = curl_init();
 
-        $response = curl_exec($curl);
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.xendit.co/v2/invoices',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Authorization: Basic eG5kX2RldmVsb3BtZW50X3dhdzlucmJ0TlNRQk5VVmJvNDdoUXdrVXdQcWRNNTVkQ0lWM0RORk5lVFBEa2w1Sndad2VST25RYWE0aW1qZUY6',
+                'Cookie: visid_incap_2182539=f5doSCL4TcW2shUF74hn0cq5wWAAAAAAQUIPAAAAAAAdtoEduPjphkSZEy6WRCyn'
+            ),
+            ));
 
-        curl_close($curl);
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+
+                //log
+            $data = new Xendit;
+            $data->log = $response;
+            $data->save();
+
+            $array = json_decode($response, true);
+
+            $affected = DB::table('transaksi')
+                ->where('order_id', $request->input('order_id'))
+                ->update(['invoice' => $array['external_id'],
+                        'transaksi_st' => $array['status']]);
+
+            //Add to incoices table
+            $invoice = new Invoices;
+            $invoice->id = $array['id'];
+            $invoice->invoice = $array['external_id'];
+            $invoice->status = $array['status'];
+            $invoice->amount = $array['amount'];
+            $invoice->email = $array['payer_email'];
+            $invoice->description = $array['description'];
+            $invoice->expiry_date = $array['expiry_date'];
+            $invoice->invoice_url = $array['invoice_url'];
+            $invoice->save();
+
+            return response()->json(['Response' => json_decode($response)], 200);
+        }
         
-        //log
-        $data = new Xendit;
-        $data->log = $response;
-        $data->save();
-
-        //Update data tabel transaksi
-        // $data = new Transaksi;
-        // $data->invoice = $response('external_id');
-        // $data->save();
-
-        $array = json_decode($response, true);
-        $affected = DB::table('transaksi')
-              ->where('order_id', $request->input('order_id'))
-              ->update(['invoice' => $array['external_id']]);
+        else if($transaksi[0]->transaksi_st == "PENDING"){
+            $transaksiInvoice = DB::table('transaksi')
+            ->join('invoices', 'transaksi.invoice', '=', 'invoices.invoice')
+            ->select('transaksi.*', 'invoices.*')
+            ->where('transaksi.order_id', $request->input('order_id'))
+            ->get();
+            $url['invoice_url'] = $transaksiInvoice[0]->invoice_url;
+            return response()->json(['Responses' => $transaksiInvoice], 200);
+        }
         
-        return response()->json(['Response' => json_decode($response)], 200);
+
+        
+
+        
+        
+        // return response()->json(['Response' => "hehe"], 200);
+        // return response()->json(['Response' => json_decode($response)], 200);
     }
 
     //
