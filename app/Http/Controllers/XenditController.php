@@ -27,6 +27,16 @@ class XenditController extends Controller
 
         $log->save();
 
+        //update status tabel transaksi
+        $affected = DB::table('transaksi')
+                ->where('invoice', $request->input('external_id'))
+                ->update(['transaksi_st' => $request->input('status')]);
+
+        //update status tabel invoices
+        $affectedInvoices = DB::table('invoices')
+                ->where('invoice', $request->input('external_id'))
+                ->update(['status' => $request->input('status')]);
+
         return response()->json(['message' => 'Success'], 200);
 
     }

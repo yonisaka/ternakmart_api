@@ -328,6 +328,7 @@ class TransaksiController extends Controller
             //Add to incoices table
             $invoice = new Invoices;
             $invoice->id = $array['id'];
+            $invoice->order_id = $request->input('order_id');
             $invoice->invoice = $array['external_id'];
             $invoice->status = $array['status'];
             $invoice->amount = $array['amount'];
@@ -341,6 +342,15 @@ class TransaksiController extends Controller
         }
         
         else if($transaksi[0]->transaksi_st == "PENDING"){
+            $transaksiInvoice = DB::table('transaksi')
+            ->join('invoices', 'transaksi.invoice', '=', 'invoices.invoice')
+            ->select('transaksi.*', 'invoices.*')
+            ->where('transaksi.order_id', $request->input('order_id'))
+            ->get();
+            $url['invoice_url'] = $transaksiInvoice[0]->invoice_url;
+            return response()->json(['Response' => $url], 200);
+        }
+        else{
             $transaksiInvoice = DB::table('transaksi')
             ->join('invoices', 'transaksi.invoice', '=', 'invoices.invoice')
             ->select('transaksi.*', 'invoices.*')
