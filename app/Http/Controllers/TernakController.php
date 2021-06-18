@@ -203,6 +203,7 @@ class TernakController extends Controller
     }
 
     public function search(Request $request){
+        // $lokasi = $request->input('lokasi');
         $ukuran = $request->input('ukuran');
         if ($ukuran == '<400'){
             $uk1 = '250';
@@ -229,6 +230,10 @@ class TernakController extends Controller
             if ($ukuran != ''){
                 $query->whereBetween('ternak.ternak_berat',[$uk1, $uk2]);
             }
+
+            // if ($lokasi != ''){
+            //     $query->where('ternak.province_id','=',$lokasi);
+            // }
 
             $ternak = $query->get();
             return response()->json(['ternak' => $ternak], 200);
