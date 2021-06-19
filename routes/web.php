@@ -132,6 +132,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('lokasi/provinsi', 'LokasiController@provinsi');
     $router->get('lokasi/kota/{province_id}', 'LokasiController@kota');
     $router->get('lokasi/kota/{city_id}/detail', 'LokasiController@detail_kota');
+    $router->get('lokasi/kota_aktif', 'LokasiController@kota_aktif');
     
     //Controller Pemesanan
     $router->post('pemesanan', 'PemesananController@store');

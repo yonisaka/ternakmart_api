@@ -52,4 +52,21 @@ class LokasiController extends Controller
         return response()->json(['kota' =>  $data], 200);
     }
     
+    public function kota_aktif(){
+        $data = DB::table('lokasi')
+                ->join('ternak','lokasi.city_id','=','ternak.city_id')
+                ->select('lokasi.city_name')
+                ->groupBy('city_name')
+                ->get();
+
+        // $data = DB::select(" SELECT * FROM (
+        //                 SELECT a.city_name FROM lokasi a
+        //                 INNER JOIN ternak b ON a.city_id = b.city_id
+        //                 GROUP BY city_name 
+        //                 ) a
+        //             ");
+
+        // print_r($data);exit;
+        return response()->json(['kota' =>  $data], 200);
+    }
 }
