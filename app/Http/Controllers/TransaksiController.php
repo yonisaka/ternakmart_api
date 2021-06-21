@@ -71,8 +71,8 @@ class TransaksiController extends Controller
                     ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
                     'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
-                    ->where('transaksi.id_user','=',$id);
-                    // ->where('transaksi.transaksi_st','=', "cart");
+                    ->where('transaksi.id_user','=',$id)
+                    ->where('transaksi.transaksi_st','=', "CART");
             $cart = $query->get();
             $count = $query->count();
 
@@ -184,11 +184,13 @@ class TransaksiController extends Controller
     public function waiting($id){
         try {
             $query = DB::table('transaksi')
-                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
-                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
-                    'ternak.file_path')
-                    ->where('transaksi.id_user','=',$id)
-                    ->where('transaksi.transaksi_st','=', "waiting_payment");
+                ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+                ->leftJoin('lokasi', 'transaksi.city_id', '=', 'lokasi.city_id')
+                ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
+                ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
+                'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
+                ->where('transaksi.id_user','=',$id)
+                ->where('transaksi.transaksi_st','=', "PENDING");
             $cart = $query->get();
             $count = $query->count();
 
@@ -206,7 +208,7 @@ class TransaksiController extends Controller
                     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
                     'ternak.file_path')
                     ->where('transaksi.id_user','=',$id)
-                    ->where('transaksi.transaksi_st','=', "confirmation");
+                    ->where('transaksi.transaksi_st','=', "PAID");
             $cart = $query->get();
             $count = $query->count();
 
@@ -289,7 +291,7 @@ class TransaksiController extends Controller
             ->where('transaksi.order_id', $request->input('order_id'))
             ->get();
 
-        if($transaksi[0]->invoice ==null){
+        if($transaksi[0]->invoice ==null || $transaksi[0]->transaksi_st == "EXPIRED"){
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
