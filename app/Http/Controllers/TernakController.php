@@ -20,19 +20,20 @@ class TernakController extends Controller
     }
 
     public function index(){
-        $data = DB::select("SELECT a.*, b.jenis_nama, c.tgl_pemeriksaan, c.id_dokter, d.nama_lengkap AS dokter_nama, e.order_id FROM ternak a
+        $data = DB::select("SELECT a.*, b.jenis_nama, c.tgl_pemeriksaan, c.id_dokter, d.nama_lengkap AS dokter_nama, e.name AS admin_nama, f.order_id FROM ternak a
         LEFT JOIN jenis b ON a.id_jenis = b.id
         LEFT JOIN (
-            SELECT id_ternak, MAX(id_dokter) AS id_dokter, MAX(tgl_pemeriksaan) AS tgl_pemeriksaan, MAX(id) AS id_pemeriksaan FROM
+            SELECT id_ternak, MAX(id_dokter) AS id_dokter, MAX(id_admin) AS id_admin, MAX(tgl_pemeriksaan) AS tgl_pemeriksaan, MAX(id) AS id_pemeriksaan FROM
             pemeriksaan 
             GROUP BY id_ternak
         )c ON a.id = c.id_ternak
         LEFT JOIN dokter d ON c.id_dokter = d.id
+        LEFT JOIN users e ON c.id_admin = e.id
         LEFT JOIN (
             SELECT id_ternak, MAX(order_id) AS order_id FROM
             transaksi 
             GROUP BY id_ternak
-        )e ON a.id = e.id_ternak")
+        )f ON a.id = f.id_ternak")
                             ;
         // $data = DB::table('ternak')
         //         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
