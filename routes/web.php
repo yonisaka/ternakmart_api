@@ -147,7 +147,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('test', 'Test@Test');
 
 
-
+    $router->get('xendit_key', 'TransaksiController@xendit_key');
 });
 
 $router->get('/key', function() {

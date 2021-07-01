@@ -181,7 +181,7 @@ class TernakController extends Controller
             $data->ternak_harga = empty($request->input('ternak_harga')) ? $data->ternak_harga : $request->input('ternak_harga');
             $data->harga_perkilo = empty($request->input('harga_perkilo')) ? $data->harga_perkilo : $request->input('harga_perkilo');
             $data->tgl_penerimaan = empty($request->input('tgl_penerimaan')) ? $data->tgl_penerimaan : $request->input('tgl_penerimaan');
-            $data->diskon_st = empty($request->input('diskon_st')) ? $data->diskon_st : $request->input('diskon_st');
+            $data->diskon_st = $request->input('diskon_st');
             $data->diskon_harga = empty($request->input('diskon_harga')) ? $data->diskon_harga : $request->input('diskon_harga');
             $data->province_id = empty($request->input('province_id')) ? $data->province_id : $request->input('province_id');
             $data->city_id = empty($request->input('city_id')) ? $data->city_id : $request->input('city_id');

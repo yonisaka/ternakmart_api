@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\Xendit;
+use App\Models\XenditAuth;
 use App\Models\Invoices;
 use Illuminate\Support\Facades\DB;
 
@@ -25,7 +26,7 @@ class TransaksiController extends Controller
         $data = DB::table('transaksi')
                 ->leftJoin('ternak', 'ternak.id', '=', 'transaksi.id_ternak')
                 ->leftJoin('users', 'users.id', '=', 'transaksi.id_user')
-                ->select('transaksi.*','ternak.ternak_nama','users.name')
+                ->select('transaksi.*','ternak.ternak_nama','ternak.file_path','users.name')
                 ->get();
 
         return response()->json(['transaksi' =>  $data], 200);
@@ -306,7 +307,7 @@ class TransaksiController extends Controller
             CURLOPT_POSTFIELDS =>json_encode($data),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Basic eG5kX2RldmVsb3BtZW50X3dhdzlucmJ0TlNRQk5VVmJvNDdoUXdrVXdQcWRNNTVkQ0lWM0RORk5lVFBEa2w1Sndad2VST25RYWE0aW1qZUY6',
+                'Authorization: '. XenditAuth::basic_auth() .'',
                 'Cookie: visid_incap_2182539=f5doSCL4TcW2shUF74hn0cq5wWAAAAAAQUIPAAAAAAAdtoEduPjphkSZEy6WRCyn'
             ),
             ));
@@ -363,5 +364,9 @@ class TransaksiController extends Controller
         }
         // return response()->json(['Response' => "hehe"], 200);
         // return response()->json(['Response' => json_decode($response)], 200);
+    }
+
+    public function xendit_key() {
+        return Xendit::basic_auth_prod();
     }
 }
