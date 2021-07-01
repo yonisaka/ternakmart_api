@@ -5,3 +5,4 @@ Homestead.yaml
 .env
 .phpunit.result.cache
 /public/foto
+/public_html/ternakmart_api/app/Models/XenditAuth.php

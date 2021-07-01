@@ -1,0 +1,4 @@
+[22-Jun-2021 20:50:57 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Database\Seeder" not found in /home/ternakma/public_html/ternakmart_api/database/seeders/DatabaseSeeder.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/ternakma/public_html/ternakmart_api/database/seeders/DatabaseSeeder.php on line 7

@@ -1,0 +1,4 @@
+[22-Jun-2021 20:50:40 UTC] PHP Fatal error:  Uncaught Error: Class "App\Http\Controllers\Controller" not found in /home/ternakma/public_html/ternakmart_api/app/Http/Controllers/MidtransController.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/ternakma/public_html/ternakmart_api/app/Http/Controllers/MidtransController.php on line 9
