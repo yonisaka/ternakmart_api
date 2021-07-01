@@ -286,7 +286,8 @@ class TransaksiController extends Controller
             'amount' => $request->input('amount'),
             'payer_email' => $request->input('payer_email'),
             'description' => $request->input('description'),
-            'success_redirect_url' => "http://caltymart.com/#/activity"
+            'success_redirect_url' => "https://caltymart.com/#/activity",
+            'should_send_email' => true
         );
 
         $transaksi = DB::table('transaksi')
