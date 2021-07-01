@@ -32,7 +32,7 @@ class TransaksiController extends Controller
         return response()->json(['transaksi' =>  $data], 200);
     }
     public function pengiriman(){
-        $data = DB::select("SELECT a.*, b.*, CONCAT(c.city_name,', ',c.province) AS lokasi_pengiriman, d.nama_lengkap AS nama_customer
+        $data = DB::select("SELECT a.*, b.lokasi_ternak, CONCAT(c.city_name,', ',c.province) AS lokasi_pengiriman, d.nama_lengkap AS nama_customer
                 FROM transaksi a
                 LEFT JOIN (
                 SELECT a.*, CONCAT(b.city_name,', ', b.province) AS lokasi_ternak FROM ternak a
@@ -40,6 +40,7 @@ class TransaksiController extends Controller
                 )b ON a.id_ternak = b.id
                 LEFT JOIN lokasi c ON a.city_id = c.city_id
                 LEFT JOIN customer d ON a.id_user = d.id_user
+                WHERE a.transaksi_st = 'PAID'
                 ")
                             ;
 
@@ -142,6 +143,7 @@ class TransaksiController extends Controller
         $data->transaksi_note = $request->input('transaksi_note');
         $data->distance = $request->input('distance');
         $data->harga_ongkir = $request->input('harga_ongkir');
+        $data->pengiriman_st = $request->input('pengiriman_st');
 
         $data->save();
 
