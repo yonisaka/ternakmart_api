@@ -30,10 +30,12 @@ class TernakController extends Controller
         LEFT JOIN dokter d ON c.id_dokter = d.id
         LEFT JOIN users e ON c.id_admin = e.id
         LEFT JOIN (
-            SELECT id_ternak, MAX(order_id) AS order_id FROM
+            SELECT id_ternak, MAX(order_id) AS order_id, MAX(transaksi_st) AS transaksi_st FROM
             transaksi 
             GROUP BY id_ternak
-        )f ON a.id = f.id_ternak")
+        )f ON a.id = f.id_ternak
+        WHERE (f.transaksi_st IS NULL OR f.transaksi_st = 'EXPIRED')
+        ")
                             ;
         // $data = DB::table('ternak')
         //         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
@@ -211,6 +213,7 @@ class TernakController extends Controller
     public function search(Request $request){
         // $lokasi = $request->input('lokasi');
         $ukuran = $request->input('ukuran');
+        $city_id = $request->input('city_id');
         if ($ukuran == '<400'){
             $uk1 = '250';
             $uk2 = '400';
@@ -229,12 +232,27 @@ class TernakController extends Controller
                     ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
                     ->leftJoin('golongan', 'jenis.id_golongan','=','golongan.id')
                     ->leftJoin('dokter', 'ternak.id_dokter', '=', 'dokter.id')
+                    ->leftJoin('transaksi','ternak.id','=','transaksi.id_ternak')
+                    // ->leftJoin('transaksi', function($joinTransaksi) {
+                    //     $joinTransaksi->on('transaksi.id_ternak','=','ternak.id')
+                    //         ->where('transaksi.transaksi_st', null)
+                    //         ->orWhere('transaksi.transaksi_st','=','EXPIRED')
+                    //         // ->max('transaksi.id')
+                    //         ;
+                    // })
                     ->select('ternak.*','jenis.jenis_nama','jenis.id_golongan','golongan.golongan_nama',
-                    'dokter.nama_lengkap')
+                    'dokter.nama_lengkap','transaksi.order_id')
+                    // ->orderBy('ternak.id')
+                    // ->whereRaw('transaksi.id = (select max(`id`) from transaksi)')
+                    // ->where('transaksi.id', \DB::raw("(select max(`id`) from transaksi group by id_ternak)"))
                     ->where('ternak.ternak_nama','like', '%'.$request->input('nama').'%');
 
             if ($ukuran != ''){
                 $query->whereBetween('ternak.ternak_berat',[$uk1, $uk2]);
+            }
+
+            if ($city_id != ''){
+                $query->where('ternak.city_id',$city_id);
             }
 
             // if ($lokasi != ''){
