@@ -30,7 +30,7 @@ class TernakController extends Controller
         LEFT JOIN dokter d ON c.id_dokter = d.id
         LEFT JOIN users e ON c.id_admin = e.id
         LEFT JOIN (
-            SELECT id_ternak, MAX(order_id) AS order_id, MAX(transaksi_st) AS transaksi_st FROM
+            SELECT MAX(id_ternak) AS id_ternak, MAX(order_id) AS order_id, MAX(transaksi_st) AS transaksi_st FROM
             transaksi 
             GROUP BY id_ternak
         )f ON a.id = f.id_ternak
