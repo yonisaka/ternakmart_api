@@ -55,8 +55,9 @@ class LokasiController extends Controller
     public function kota_aktif(){
         $data = DB::table('lokasi')
                 ->join('ternak','lokasi.city_id','=','ternak.city_id')
-                ->select('lokasi.city_name')
-                ->groupBy('city_name')
+                ->where('ternak.ternak_st',1)
+                ->select('lokasi.city_id','lokasi.city_name')
+                ->groupBy('city_id','city_name')
                 ->get();
 
         // $data = DB::select(" SELECT * FROM (
