@@ -155,5 +155,5 @@ $router->get('/key', function() {
 });
 
 
-$router->get('/send_mail','UserController@send_mail');
+$router->get('/send_mail{id}','UserController@send_mail');
 $router->get('/verifikasi_akun/{id}','UserController@verifikasi_akun');

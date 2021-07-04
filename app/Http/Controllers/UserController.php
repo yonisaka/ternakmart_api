@@ -99,8 +99,8 @@ class UserController extends Controller
 
             $user->save();
             
-            // email verification
-            $this->send_mail($user->id);
+            // // email verification
+            // $this->send_mail($user->id);
             //return successful response
             return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
 

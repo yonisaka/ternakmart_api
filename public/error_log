@@ -9,3 +9,12 @@
 [07-May-2021 08:18:18 UTC] PHP Warning:  require(/home/ternakma/public_html/ternakmart_api/public/../bootstrasp/app.php): failed to open stream: No such file or directory in /home/ternakma/public_html/ternakmart_api/public/index.php on line 14
 [07-May-2021 08:18:18 UTC] PHP Fatal error:  require(): Failed opening required '/home/ternakma/public_html/ternakmart_api/public/../bootstrasp/app.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home/ternakma/public_html/ternakmart_api/public/index.php on line 14
 [17-Jun-2021 10:10:40 UTC] PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in /home/ternakma/public_html/ternakmart_api/app/Http/Controllers/Test.php on line 29
+[04-Jul-2021 05:52:24 UTC] PHP Warning:  require(/home/ternakma/public_html/ternakmart_api/vendor/symfony/polyfill-php80/bootstrap.php): Failed to open stream: No such file or directory in /home/ternakma/public_html/ternakmart_api/vendor/composer/autoload_real.php on line 71
+[04-Jul-2021 05:52:24 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/ternakma/public_html/ternakmart_api/vendor/composer/../symfony/polyfill-php80/bootstrap.php' (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/ternakma/public_html/ternakmart_api/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/ternakma/public_html/ternakmart_api/vendor/composer/autoload_real.php(61): composerRequired4d9f050425b8d742622eda20ea6149f()
+#1 /home/ternakma/public_html/ternakmart_api/vendor/autoload.php(7): ComposerAutoloaderInitd4d9f050425b8d742622eda20ea6149f::getLoader()
+#2 /home/ternakma/public_html/ternakmart_api/bootstrap/app.php(3): require_once('/home/ternakma/...')
+#3 /home/ternakma/public_html/ternakmart_api/public/index.php(14): require('/home/ternakma/...')
+#4 {main}
+  thrown in /home/ternakma/public_html/ternakmart_api/vendor/composer/autoload_real.php on line 71
