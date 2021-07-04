@@ -153,3 +153,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 $router->get('/key', function() {
     return \Illuminate\Support\Str::random(32);
 });
+
+
+$router->get('/send_mail','UserController@send_mail');
+$router->get('/verifikasi_akun/{id}','UserController@verifikasi_akun');

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Mail\ConfirmMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -96,7 +98,9 @@ class UserController extends Controller
             $user->user_st = $request->input('user_st');
 
             $user->save();
-
+            
+            // email verification
+            $this->send_mail($user->id);
             //return successful response
             return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
 
@@ -145,4 +149,28 @@ class UserController extends Controller
         return response()->json(['message' => 'Berhasil Menghapus Data'], 200);
     }
 
+    public function send_mail($id){
+        $data = User::where('id',$id)->first();
+        // print_r($data);exit;
+        // Mail::to('yonisaka0@gmail.com')->send(new ConfirmMail($data));
+        Mail::to($data->email)->send(new ConfirmMail($data));
+    }
+
+    public function verifikasi_akun($id)
+    {
+        try {
+
+            $user = User::where('id', $id)->first();
+            $user->user_st = 'Aktif';
+            $user->save();
+
+            //return successful response
+            return redirect('https://caltymart.com');
+
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => $e], 409);
+        }
+
+    }
 }
