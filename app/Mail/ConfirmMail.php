@@ -25,7 +25,8 @@ class ConfirmMail extends Mailable
         // return $this->view('mail_confirm', [
         //         'url' => 'caltymart.com/verifikasi_akun/'.$this->data->id,
         //     ]);
-        return $this->from('caltyfarmjogja@gmail.com')
+        return $this->from('noreply-caltymart@caltymart.com')
+                ->subject('Aktivasi akun Caltymart')
                 ->markdown('mail_confirm', [
                     'url' => 'https://api.caltymart.com/verifikasi_akun/'.$this->data->id,
                 ]);
