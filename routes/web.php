@@ -127,13 +127,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //Controller Midtrans
     $router->post('notification/payment', 'MidtransController@paymentHandling');
     
-    //Controller Ongkir
+    //Controller Lokasi
     $router->get('lokasi', 'LokasiController@index');
     $router->get('lokasi/provinsi', 'LokasiController@provinsi');
     $router->get('lokasi/kota/{province_id}', 'LokasiController@kota');
     $router->get('lokasi/kota/{city_id}/detail', 'LokasiController@detail_kota');
     $router->get('lokasi/kota_aktif', 'LokasiController@kota_aktif');
     
+    //Controller Promo Ongkir
+    $router->get('promo_ongkir/{city_id}', 'PromoOngkirController@promo');
+
     //Controller Pemesanan
     $router->post('pemesanan', 'PemesananController@store');
     
