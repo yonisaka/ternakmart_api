@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Customer;
 use App\Http\Controllers\Hash;
 use Illuminate\Support\Facades\DB;
 //import auth facades
@@ -32,8 +33,13 @@ class AuthController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
+            'nomor_hp' => 'required',
+            'tanggal_lahir' => 'required',
+            'alamat' => 'required',
+            'jenis_kelamin' => 'required',
         ]);
 
+        //insert tabel users
         try {
 
             $user = new User;
@@ -47,6 +53,24 @@ class AuthController extends Controller
 
             $user->save();
 
+            $id_user = DB::table('users')
+                    ->select('id')
+                    ->orderByDesc('id')
+                    ->limit(1)
+                    ->first();
+                    // print_r($id_user->id);exit;
+
+            //insert tabel customer
+            $data = new Customer;
+            $data->nama_lengkap = $request->input('nama_lengkap');
+            $data->nomor_hp = $request->input('nomor_hp');
+            $data->tanggal_lahir = $request->input('tanggal_lahir');
+            $data->alamat = $request->input('alamat');
+            $data->jenis_kelamin = $request->input('jenis_kelamin');
+            $data->id_user = $id_user->id;
+
+            $data->save();
+
             // email verification
             $this->send_mail($user->id);
             //return successful response
@@ -54,7 +78,7 @@ class AuthController extends Controller
 
         } catch (\Exception $e) {
             //return error message
-            return response()->json(['message' => "asd"], 409);
+            return response()->json(['message' => $e], 409);
         }
 
     }
