@@ -151,6 +151,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     
     //Controller Xendit
     $router->post('callback/invoice', 'XenditController@paymentHandling');
+    $router->post('callback/log', 'XenditController@logHandling');
     
     //Controller Test
     $router->get('test', 'Test@Test');

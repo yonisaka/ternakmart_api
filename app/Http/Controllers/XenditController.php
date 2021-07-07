@@ -41,5 +41,15 @@ class XenditController extends Controller
 
     }
 
+    public function logHandling(Request $request){
+        $log = new Xendit;
+
+        $entityBody = file_get_contents('php://input');
+
+        $log->log = $entityBody;
+
+        $log->save();
+    }
+
     //
 }
