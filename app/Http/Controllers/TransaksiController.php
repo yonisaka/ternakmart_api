@@ -67,18 +67,59 @@ class TransaksiController extends Controller
 
     public function cart($id){
         try {
-            $query = DB::table('transaksi')
-                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
-                    ->leftJoin('lokasi', 'transaksi.city_id', '=', 'lokasi.city_id')
-                    ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
-                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
-                    'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
-                    ->where('transaksi.id_user','=',$id)
-                    ->where('transaksi.transaksi_st','=', "CART");
-            $cart = $query->get();
-            $count = $query->count();
+            // $query = DB::table('transaksi')
+            //         ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+            //         ->leftJoin('lokasi', 'transaksi.city_id', '=', 'lokasi.city_id')
+            //         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
+            //         ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
+            //         'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
+            //         ->where('transaksi.id_user','=',$id)
+            //         ->where('transaksi.transaksi_st','=', "CART");
+            // $cart = $query->get();
+            // $count = $cart->count();
+            $cart = DB::select("
+                    SELECT a.*, 
+                    b.ternak_nama,b.ternak_deskripsi,b.perawatan_harga,b.file_path AS file_ternak,
+                    c.produk_nama,c.produk_deskripsi,c.produk_jenis,c.qty,c.produk_harga, c.file_path AS file_produk
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    WHERE a.id_user ='$id'
+                    AND a.transaksi_st = 'CART'
+                    ");
 
-            return response()->json(['cart' => $cart, 'counts' => $count], 200);
+            $count = DB::select("
+                    SELECT COUNT(*) AS total
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    WHERE a.id_user ='$id'
+                    AND a.transaksi_st = 'CART'
+                    ")[0];
+
+            return response()->json(['cart' => $cart, 'counts' => $count->total], 200);
 
         } catch (\Exception $e) {
 
@@ -107,6 +148,7 @@ class TransaksiController extends Controller
         $data = new Transaksi;
 
         $data->id_ternak = $request->input('id_ternak');
+        $data->id_produk = $request->input('id_produk');
         $data->id_user = $request->input('id_user');
         $data->ternak_harga = $request->input('ternak_harga');
         $data->masa_perawatan = $request->input('masa_perawatan');
@@ -130,6 +172,7 @@ class TransaksiController extends Controller
     public function update(Request $request, $id){
         $data = Transaksi::where('id', $id)->first();
         $data->id_ternak = $request->input('id_ternak');
+        $data->id_produk = $request->input('id_produk');
         $data->id_user = $request->input('id_user');
         $data->ternak_harga = $request->input('ternak_harga');
         $data->masa_perawatan = $request->input('masa_perawatan');
@@ -156,15 +199,37 @@ class TransaksiController extends Controller
 
     public function detail_transaksi($id){
         try {
-            $query = DB::table('transaksi')
-                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
-                    ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
-                    ->leftJoin('users', 'users.id', '=', 'transaksi.id_user')
-                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
-                    'ternak.file_path', 'users.email')
-                    ->where('transaksi.id','=',$id);
-                    // ->where('transaksi.transaksi_st','=', "cart");
-            $cart = $query->first();
+            // $query = DB::table('transaksi')
+            //         ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+            //         ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
+            //         ->leftJoin('users', 'users.id', '=', 'transaksi.id_user')
+            //         ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
+            //         'ternak.file_path', 'users.email')
+            //         ->where('transaksi.id','=',$id);
+            //         // ->where('transaksi.transaksi_st','=', "cart");
+            // $cart = $query->first();
+            $cart = DB::select("
+                    SELECT a.*, 
+                    b.ternak_nama,b.ternak_deskripsi,b.perawatan_harga,b.file_path AS file_ternak,
+                    c.produk_nama,c.produk_deskripsi,c.produk_jenis,c.qty,c.produk_harga, c.file_path AS file_produk,
+                    d.email
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.nama_penerima, a.detail_alamat, a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.nama_penerima, a.detail_alamat, a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    LEFT JOIN users d ON a.id_user = d.id
+                    WHERE a.id ='$id'
+                    ")[0];
 
             return response()->json(['cart' => $cart], 200);
 
@@ -186,16 +251,56 @@ class TransaksiController extends Controller
 
     public function waiting($id){
         try {
-            $query = DB::table('transaksi')
-                ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
-                ->leftJoin('lokasi', 'transaksi.city_id', '=', 'lokasi.city_id')
-                ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
-                ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
-                'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
-                ->where('transaksi.id_user','=',$id)
-                ->where('transaksi.transaksi_st','=', "PENDING");
-            $cart = $query->get();
-            $count = $query->count();
+            // $query = DB::table('transaksi')
+            //     ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+            //     ->leftJoin('lokasi', 'transaksi.city_id', '=', 'lokasi.city_id')
+            //     ->leftJoin('jenis', 'ternak.id_jenis', '=', 'jenis.id')
+            //     ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 'jenis.perawatan_harga', 
+            //     'ternak.file_path', 'lokasi.city_name', 'lokasi.province')
+            //     ->where('transaksi.id_user','=',$id)
+            //     ->where('transaksi.transaksi_st','=', "PENDING");
+            // $cart = $query->get();
+            // $count = $query->count();
+            $cart = DB::select("
+                    SELECT a.*, 
+                    b.ternak_nama,b.ternak_deskripsi,b.perawatan_harga,b.file_path AS file_ternak,
+                    c.produk_nama,c.produk_deskripsi,c.produk_jenis,c.qty,c.produk_harga, c.file_path AS file_produk
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    WHERE a.id_user ='$id'
+                    AND a.transaksi_st = 'PENDING'
+                    ");
+            $count = DB::select("
+                    SELECT COUNT(*) AS total
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    WHERE a.id_user ='$id'
+                    AND a.transaksi_st = 'PENDING'
+                    ")[0];
 
             return response()->json(['cart' => $cart, 'counts' => $count], 200);
 
@@ -206,15 +311,54 @@ class TransaksiController extends Controller
     }
     public function confirmation($id){
         try {
-            $query = DB::table('transaksi')
-                    ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
-                    ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
-                    'ternak.file_path')
-                    ->where('transaksi.id_user','=',$id)
-                    ->where('transaksi.transaksi_st','=', "PAID");
-            $cart = $query->get();
-            $count = $query->count();
-
+            // $query = DB::table('transaksi')
+            //         ->leftJoin('ternak', 'transaksi.id_ternak', '=', 'ternak.id')
+            //         ->select('transaksi.*','ternak.ternak_nama','ternak.ternak_deskripsi', 
+            //         'ternak.file_path')
+            //         ->where('transaksi.id_user','=',$id)
+            //         ->where('transaksi.transaksi_st','=', "PAID");
+            // $cart = $query->get();
+            // $count = $query->count();
+            $cart = DB::select("
+                    SELECT a.*, 
+                    b.ternak_nama,b.ternak_deskripsi,b.perawatan_harga,b.file_path AS file_ternak,
+                    c.produk_nama,c.produk_deskripsi,c.produk_jenis,c.qty,c.produk_harga, c.file_path AS file_produk
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    WHERE a.id_user ='$id'
+                    AND a.transaksi_st = 'PAID'
+                    ");
+            $count = DB::select("
+                    SELECT COUNT(*) AS total
+                    FROM (
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'ternak' AS st, b.id AS id_produk  FROM transaksi a
+                        LEFT JOIN ternak b ON a.id_ternak = b.id
+                        WHERE id_produk IS NULL
+                        UNION ALL
+                        SELECT a.id,a.order_id,a.id_user,a.ternak_harga,a.masa_perawatan,a.total_harga,a.transaksi_st,a.harga_ongkir,'produk' AS st,b.id AS id_produk FROM transaksi a
+                        LEFT JOIN produk b ON a.id_produk = b.id
+                        WHERE id_ternak IS NULL
+                    )a
+                    LEFT JOIN (
+                        SELECT a.*, b.perawatan_harga FROM ternak a
+                        LEFT JOIN jenis b ON a.id_jenis = b.id
+                    ) b ON a.id_produk = b.id AND a.st ='ternak'
+                    LEFT JOIN produk c ON a.id_produk = c.id AND a.st='produk'
+                    WHERE a.id_user ='$id'
+                    AND a.transaksi_st = 'PAID'
+                    ")[0];
             return response()->json(['cart' => $cart, 'counts' => $count], 200);
 
         } catch (\Exception $e) {

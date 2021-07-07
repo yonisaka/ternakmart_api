@@ -51,6 +51,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->delete('ternak/{id}', 'TernakController@destroy');
     $router->post('cariternak', 'TernakController@search');
 
+    //Controller Produk
+    $router->get('produk', 'ProdukController@index');
+    $router->get('produk/{id}', 'ProdukController@show');
+    $router->post('cariproduk', 'ProdukController@search');
+
     //Controller Golongan
     $router->get('golongan', 'GolonganController@index');
     $router->get('golongan/{id}', 'GolonganController@show');
@@ -133,6 +138,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('lokasi/kota/{province_id}', 'LokasiController@kota');
     $router->get('lokasi/kota/{city_id}/detail', 'LokasiController@detail_kota');
     $router->get('lokasi/kota_aktif', 'LokasiController@kota_aktif');
+    $router->get('lokasi/kota_aktif_produk', 'LokasiController@kota_aktif_produk');
     
     //Controller Promo Ongkir
     $router->get('promo_ongkir/{city_id}', 'PromoOngkirController@promo');
