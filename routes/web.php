@@ -55,6 +55,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('produk', 'ProdukController@index');
     $router->get('produk/{id}', 'ProdukController@show');
     $router->post('cariproduk', 'ProdukController@search');
+    $router->post('produk', 'ProdukController@store');
+    $router->put('produk/{id}', 'ProdukController@update');
+    $router->delete('produk/{id}', 'ProdukController@destroy');
 
     //Controller Golongan
     $router->get('golongan', 'GolonganController@index');
