@@ -75,6 +75,26 @@ class LokasiController extends Controller
         $data = DB::table('lokasi')
                 ->join('produk','lokasi.city_id','=','produk.city_id')
                 ->select('lokasi.city_id','lokasi.city_name')
+                ->where('produk.kategori','=', 'produk')
+                ->groupBy('city_id','city_name')
+                ->get();
+
+        // $data = DB::select(" SELECT * FROM (
+        //                 SELECT a.city_name FROM lokasi a
+        //                 INNER JOIN ternak b ON a.city_id = b.city_id
+        //                 GROUP BY city_name 
+        //                 ) a
+        //             ");
+
+        // print_r($data);exit;
+        return response()->json(['kota' =>  $data], 200);
+    }
+
+    public function kota_aktif_aqiqah(){
+        $data = DB::table('lokasi')
+                ->join('produk','lokasi.city_id','=','produk.city_id')
+                ->select('lokasi.city_id','lokasi.city_name')
+                ->where('produk.kategori','=', 'aqiqah')
                 ->groupBy('city_id','city_name')
                 ->get();
 

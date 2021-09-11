@@ -69,6 +69,7 @@ class ProdukController extends Controller
             $data->produk_harga = $request->input('produk_harga');
             $data->province_id = $request->input('province_id');
             $data->city_id = $request->input('city_id');
+            $data->kategori = $request->input('kategori');
             $data->file_name = $filename;
             $data->file_path = url('/').'/'.$path.'/'.$filename;
             $data->save();
@@ -101,6 +102,7 @@ class ProdukController extends Controller
             $data->produk_harga = empty($request->input('produk_harga')) ? $data->produd_nama : $request->input('produk_harga');
             $data->province_id = empty($request->input('province_id')) ? $data->produd_nama : $request->input('province_id');
             $data->city_id = empty($request->input('city_id')) ? $data->produd_nama : $request->input('city_id');
+            $data->kategori = empty($request->input('kategori')) ? $data->produd_nama : $request->input('kategori');
             $data->file_name = $filename;
             $data->file_path = url('/').'/'.$path.'/'.$filename;
             $data->save();

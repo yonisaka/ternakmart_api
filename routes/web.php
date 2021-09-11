@@ -142,7 +142,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('lokasi/kota/{city_id}/detail', 'LokasiController@detail_kota');
     $router->get('lokasi/kota_aktif', 'LokasiController@kota_aktif');
     $router->get('lokasi/kota_aktif_produk', 'LokasiController@kota_aktif_produk');
-    
+    $router->get('lokasi/kota_aktif_aqiqah', 'LokasiController@kota_aktif_aqiqah');
     //Controller Promo Ongkir
     $router->get('promo_ongkir/{city_id}', 'PromoOngkirController@promo');
 
